@@ -1,5 +1,4 @@
 <template>
-  Transactions
   <div class="transactions-list">
     <TransactionItem
       v-for="transaction of transactions"
@@ -13,17 +12,18 @@
 // import { Transaction } from '@/models/transaction';
 import { Vue, Options } from 'vue-class-component';
 import TransactionItem from './TransactionItem.vue';
+import { Transaction } from '@/models/transaction';
 
 @Options({
   components: {
     TransactionItem
   },
   props: {
-    transactions: Array
+    transactions: []
   }
 })
 export default class Transactions extends Vue {
-  transactions = [];
+  transactions: Transaction[] = [];
 }
 </script>
 

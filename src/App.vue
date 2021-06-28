@@ -6,6 +6,7 @@
 import { Options, Vue } from 'vue-class-component';
 import Transactions from './components/Transactions.vue';
 import { getTransactions } from '@/lib/connector';
+import { Transaction } from './models/transaction';
 
 @Options({
   components: {
@@ -18,8 +19,8 @@ import { getTransactions } from '@/lib/connector';
   }
 })
 export default class App extends Vue {
-  monthOffset = 0;
-  transactions = [];
+  monthOffset: number = 0;
+  transactions: Transaction[] = [];
 
   async beforeCreate() {
     this.transactions = (await getTransactions([this.monthOffset]))[0];
