@@ -1,17 +1,30 @@
 <template>
-  <Transactions />
+  <Transactions v-bind:transactions="transactions" />
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import Transactions from './components/Transactions.vue';
+import { getTransactions } from '@/lib/connector';
 
 @Options({
   components: {
     Transactions
+  },
+  watch: {
+    monthOffset: async function(value: number) {
+      this.transactions = (await getTransactions([value]))[0];
+    }
   }
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  monthOffset = 0;
+  transactions = [];
+
+  async beforeCreate() {
+    this.transactions = (await getTransactions([this.monthOffset]))[0];
+  }
+}
 </script>
 
 <style>

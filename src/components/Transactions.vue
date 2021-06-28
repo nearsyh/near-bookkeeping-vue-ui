@@ -1,18 +1,29 @@
 <template>
   Transactions
-  <div class=""></div>
+  <div class="transactions-list">
+    <TransactionItem
+      v-for="transaction of transactions"
+      v-bind:key="transaction.timestamp"
+      v-bind:transaction="transaction"
+    />
+  </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+// import { Transaction } from '@/models/transaction';
+import { Vue, Options } from 'vue-class-component';
+import TransactionItem from './TransactionItem.vue';
 
 @Options({
+  components: {
+    TransactionItem
+  },
   props: {
-    msg: String
+    transactions: Array
   }
 })
 export default class Transactions extends Vue {
-  msg!: string;
+  transactions = [];
 }
 </script>
 
