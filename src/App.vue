@@ -3,8 +3,8 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component'
-import Transactions from './components/Transactions.vue'
+import { Options, Vue } from 'vue-class-component';
+import Transactions from './components/Transactions.vue';
 
 @Options({
   components: {

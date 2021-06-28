@@ -44,7 +44,9 @@
     "parserOptions": {
       "parser": "@typescript-eslint/parser"
     },
-    "rules": {}
+    "rules": {
+      "semi": [2, "always"]
+    }
   },
   "browserslist": [
     "> 1%",

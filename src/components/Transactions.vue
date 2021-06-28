@@ -1,11 +1,10 @@
 <template>
   Transactions
-  <div class="">
-  </div>
+  <div class=""></div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component'
+import { Options, Vue } from 'vue-class-component';
 
 @Options({
   props: {
@@ -13,7 +12,7 @@ import { Options, Vue } from 'vue-class-component'
   }
 })
 export default class Transactions extends Vue {
-  msg!: string
+  msg!: string;
 }
 </script>
 
