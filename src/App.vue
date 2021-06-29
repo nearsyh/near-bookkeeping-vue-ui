@@ -1,12 +1,14 @@
 <template>
-  <Transactions v-bind:transactions="transactions" />
+  <Transactions
+    v-bind:transactions="transactions"
+  />
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import Transactions from './components/Transactions.vue';
 import { getTransactions } from '@/lib/connector';
-import { Transaction } from './models/transaction';
+import { TransactionList } from './models/transaction';
 
 @Options({
   components: {
@@ -20,10 +22,12 @@ import { Transaction } from './models/transaction';
 })
 export default class App extends Vue {
   monthOffset: number = 0;
-  transactions: Transaction[] = [];
+  transactions: TransactionList = new TransactionList([]);
 
   async beforeCreate() {
-    this.transactions = (await getTransactions([this.monthOffset]))[0];
+    this.transactions = new TransactionList(
+      (await getTransactions([this.monthOffset]))[0]
+    );
   }
 }
 </script>

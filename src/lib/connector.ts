@@ -1,42 +1,29 @@
-import { AccountId } from '@/models/account';
+import { Account, AccountId } from '@/models/account';
 import { Money } from '@/models/common';
-import { Entry, TransactionType } from '@/models/transaction';
+import { Entry, Transaction, TransactionType } from '@/models/transaction';
+import axios from 'axios';
 
 const endpoint = 'http://localhost:8080';
 // const endpoint = 'https://rss-api.nearsyh.me'
 
 const apiEndpoint = `${endpoint}/api/1.0`;
-const jsonHeaders = {
-  'Content-Type': 'application/json'
-};
 
-async function get(url: string) {
-  const response = await fetch(url, {
-    headers: jsonHeaders,
-    method: 'GET',
-    mode: 'cors',
-    redirect: 'follow'
-  });
-  return response.json();
+async function get<T>(url: string): Promise<T> {
+  const response = await axios.get<T>(url);
+  return response.data;
 }
 
-async function post(url: string, body: any) {
-  const response = await fetch(url, {
-    headers: jsonHeaders,
-    method: 'POST',
-    mode: 'cors',
-    redirect: 'follow',
-    body: JSON.stringify(body)
-  });
-  return response.json();
+async function post<T>(url: string, body: any): Promise<T> {
+  const response = await axios.post<T>(url, body);
+  return response.data;
 }
 
-export async function allAccounts() {
-  return await get(`${apiEndpoint}/accounts`);
+export async function allAccounts(): Promise<Account[]> {
+  return await get<Account[]>(`${apiEndpoint}/accounts`);
 }
 
-export async function getTransactions(monthOffsets: number[]) {
-  return await post(`${apiEndpoint}/transactions/list_by_month`, {
+export async function getTransactions(monthOffsets: number[]): Promise<Transaction[][]> {
+  return await post<Transaction[][]>(`${apiEndpoint}/transactions/list_by_month`, {
     offsets: monthOffsets
   });
 }
@@ -48,7 +35,7 @@ export async function addTransaction(
     return;
   }
   const delta = Money.fromStr(amount);
-  return await post(`${apiEndpoint}/transactions`, {
+  return await post<any>(`${apiEndpoint}/transactions`, {
     creator,
     note,
     transactionType,

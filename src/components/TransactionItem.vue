@@ -13,6 +13,8 @@
 </template>
 
 <script lang="ts">
+import { PropType } from 'vue';
+import { Prop } from 'vue-property-decorator';
 import { Options, Vue } from 'vue-class-component';
 import { Transaction } from '@/models/transaction';
 
@@ -22,14 +24,18 @@ import { Transaction } from '@/models/transaction';
   }
 })
 export default class TransactionItem extends Vue {
-  transaction!: Transaction;
+  @Prop(Object as PropType<Transaction>) transaction!: Transaction;
 
   get avatar(): String {
     return this.transaction.creator === '傻爸' ? 'near.jpg' : 'pang.jpg';
   }
 
+  get title(): String {
+    return 'title';
+  }
+
   get description(): String {
-    return 'description';
+    return Transaction.fromObject(this.transaction).description();
   }
 }
 </script>

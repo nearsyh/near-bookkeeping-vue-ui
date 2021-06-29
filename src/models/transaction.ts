@@ -46,4 +46,28 @@ export class Transaction {
     this.transactionType = transactionType;
     this.entries = entries;
   }
+
+  public static fromObject(obj: any): Transaction {
+    return new Transaction(obj.timestamp, obj.creator, obj.note, obj.transactionType, obj.entries);
+  }
+
+  public description(): String {
+    return 'description';
+  }
+}
+
+export class TransactionList {
+  transactions: Transaction[];
+
+  constructor(transactions: Transaction[]) {
+    this.transactions = transactions;
+  }
+
+  items(): Transaction[] {
+    return this.transactions;
+  }
+
+  item(i: number): Transaction {
+    return this.transactions[i];
+  }
 }

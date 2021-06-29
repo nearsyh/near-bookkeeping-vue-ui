@@ -1,29 +1,28 @@
 <template>
   <div class="transactions-list">
     <TransactionItem
-      v-for="transaction of transactions"
-      v-bind:key="transaction.timestamp"
-      v-bind:transaction="transaction"
+      v-for="transaction of transactions.items()"
+      :key="transaction.timestamp"
+      :transaction="transaction"
     />
   </div>
 </template>
 
 <script lang="ts">
-// import { Transaction } from '@/models/transaction';
 import { Vue, Options } from 'vue-class-component';
 import TransactionItem from './TransactionItem.vue';
-import { Transaction } from '@/models/transaction';
+import { TransactionList } from '@/models/transaction';
 
 @Options({
   components: {
     TransactionItem
   },
   props: {
-    transactions: []
+    transactions: TransactionList
   }
 })
 export default class Transactions extends Vue {
-  transactions: Transaction[] = [];
+  transactions!: TransactionList;
 }
 </script>
 
