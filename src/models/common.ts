@@ -26,6 +26,10 @@ export class Money {
     return `${firstPart}.${secondPart < 10 ? '0' : ''}${secondPart}`;
   }
 
+  public abs(): Money {
+    return new Money(Math.abs(this.cents));
+  }
+
   negative(): Money {
     return new Money(-1 * this.cents);
   }
