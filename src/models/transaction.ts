@@ -1,5 +1,5 @@
 import { Timestamp, Money } from './common';
-import { AccountId } from './account';
+import { AccountId, Accounts } from './account';
 
 export enum TransactionType {
   Salary,
@@ -107,14 +107,26 @@ export class Transaction {
       TransactionType[obj.transactionType as keyof typeof TransactionType], entries);
   }
 
-  public description(): String {
+  public description(accounts: Accounts): String {
     if (TransactionType[this.transactionType] === TransactionType[TransactionType.Initialize]) {
-      return `${this.transactionTypeName()}`;
-    } else if (isExpense(this.transactionType)) {
-      return `${this.transactionTypeName()}支出: ${this.amount().toStr()}`;
-    } else {
-      return `${this.transactionTypeName()}: ${this.amount().toStr()}`;
+      return '';
     }
+
+    const fromAccount = accounts.accountById(this.fromEntry().accountId);
+    const toAccount = accounts.accountById(this.toEntry().accountId);
+    if (isExpense(this.transactionType)) {
+      return `${fromAccount.fullName()} -${this.amount().toStr()}元`;
+    } else {
+      return `${fromAccount.fullName()}->${toAccount.fullName()} ${this.amount().toStr()}元`;
+    }
+  }
+
+  public fromEntry(): Entry {
+    return this.entries.filter((entry) => entry.delta.isNegative)[0];
+  }
+
+  public toEntry(): Entry {
+    return this.entries.filter((entry) => !entry.delta.isNegative)[0];
   }
 
   public transactionTypeName(): String {

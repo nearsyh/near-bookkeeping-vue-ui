@@ -30,6 +30,10 @@ export class Money {
     return new Money(Math.abs(this.cents));
   }
 
+  public get isNegative(): boolean {
+    return this.cents < 0;
+  }
+
   negative(): Money {
     return new Money(-1 * this.cents);
   }

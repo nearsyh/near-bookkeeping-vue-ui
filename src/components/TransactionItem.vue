@@ -6,6 +6,7 @@
     <div class="transaction-details">
       <div class="transaction-date">2020-12</div>
       <div>
+        <span class="transaction-type">{{ transactionType }}</span>
         {{ description }}
       </div>
     </div>
@@ -17,6 +18,7 @@ import { PropType } from 'vue';
 import { Prop } from 'vue-property-decorator';
 import { Options, Vue } from 'vue-class-component';
 import { Transaction } from '@/models/transaction';
+import { globalState } from '@/App.vue';
 
 @Options({
   props: {
@@ -34,8 +36,14 @@ export default class TransactionItem extends Vue {
     return 'title';
   }
 
+  get transactionType(): String {
+    return Transaction.fromObject(this.transaction).transactionTypeName();
+  }
+
   get description(): String {
-    return Transaction.fromObject(this.transaction).description();
+    return Transaction.fromObject(this.transaction).description(
+      globalState.accounts
+    );
   }
 }
 </script>
@@ -62,6 +70,11 @@ export default class TransactionItem extends Vue {
 .transaction-creator img {
   width: 100%;
   height: 100%;
+}
+
+.transaction-type {
+  font-weight: bold;
+  margin-right: 10px;
 }
 
 .transaction-details {

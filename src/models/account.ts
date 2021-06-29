@@ -24,8 +24,12 @@ export class Account {
     this.accountType = accountType;
   }
 
-  typeName(): String {
-    return 'type';
+  public fullName(): String {
+    return `${this.owner}${this.name}`;
+  }
+
+  public static fromObject(obj: any) {
+    return new Account(obj.id, obj.name, obj.owner, AccountType[obj.accountType as keyof typeof AccountType]);
   }
 };
 
@@ -35,11 +39,11 @@ export class Accounts {
   constructor(accounts: Account[]) {
     this.accounts = new Map();
     for (const account of accounts) {
-      this.accounts.set(account.id, account);
+      this.accounts.set(account.id, Account.fromObject(account));
     }
   }
 
-  accountById(id: number) {
-    return this.accounts.get(id);
+  public accountById(id: number): Account {
+    return this.accounts.get(id)!;
   }
 }
