@@ -29,7 +29,9 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^7.0.0",
-    "typescript": "~4.1.5"
+    "naive-ui": "^2.14.0",
+    "typescript": "~4.1.5",
+    "vfonts": "^0.1.0"
   },
   "eslintConfig": {
     "root": true,
@@ -45,7 +47,10 @@
       "parser": "@typescript-eslint/parser"
     },
     "rules": {
-      "semi": [2, "always"],
+      "semi": [
+        2,
+        "always"
+      ],
       "space-before-function-paren": 0
     }
   },
