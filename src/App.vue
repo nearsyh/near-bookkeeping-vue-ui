@@ -1,14 +1,18 @@
 <template>
-  <Transactions
-    v-bind:transactions="transactions"
-  />
+  <Transactions v-bind:transactions="transactions" />
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import Transactions from './components/Transactions.vue';
-import { getTransactions } from '@/lib/connector';
+import { allAccounts, getTransactions } from '@/lib/connector';
 import { TransactionList } from './models/transaction';
+import { reactive } from '@vue/reactivity';
+import { Accounts } from './models/account';
+
+export const globalState = reactive({
+  accounts: new Accounts([])
+});
 
 @Options({
   components: {
@@ -28,6 +32,7 @@ export default class App extends Vue {
     this.transactions = new TransactionList(
       (await getTransactions([this.monthOffset]))[0]
     );
+    globalState.accounts = new Accounts(await allAccounts());
   }
 }
 </script>

@@ -28,3 +28,18 @@ export class Account {
     return 'type';
   }
 };
+
+export class Accounts {
+  accounts: Map<number, Account>;
+
+  constructor(accounts: Account[]) {
+    this.accounts = new Map();
+    for (const account of accounts) {
+      this.accounts.set(account.id, account);
+    }
+  }
+
+  accountById(id: number) {
+    return this.accounts.get(id);
+  }
+}
