@@ -1,11 +1,7 @@
 <template>
-  <n-button circle>
-    <template #icon>
-      <n-icon>
-        <slot></slot>
-      </n-icon>
-    </template>
-  </n-button>
+  <div class="adding-expense">
+    Adding Expense
+  </div>
 </template>
 
 <script lang="ts">
@@ -18,7 +14,8 @@ import { NButton, NIcon } from 'naive-ui';
     NIcon
   }
 })
-export default class Button extends Vue {}
+export default class AddingExpense extends Vue {
+}
 </script>
 
 <style scoped></style>
