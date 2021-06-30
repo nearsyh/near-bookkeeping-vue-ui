@@ -1,21 +1,47 @@
 <template>
   <div class="adding-expense">
-    Adding Expense
+    <div class="expense-type-selector">
+      <IconButton @click="setExpenseType('Shopping')"><shopping-icon /></IconButton>
+      <IconButton @click="setExpenseType('Food')"><food-icon /></IconButton>
+      <IconButton @click="setExpenseType('Commute')"><commute-icon /></IconButton>
+      <IconButton @click="setExpenseType('Exceptional')"><exceptional-icon /></IconButton>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
-import { NButton, NIcon } from 'naive-ui';
+import {
+  ShoppingBagOutlined as ShoppingIcon,
+  FastfoodOutlined as FoodIcon,
+  CommuteOutlined as CommuteIcon,
+  WarningAmberSharp as ExceptionalIcon
+} from '@vicons/material';
+import IconButton from './IconButton.vue';
+import { TransactionType } from '@/models/transaction';
 
 @Options({
   components: {
-    NButton,
-    NIcon
+    ShoppingIcon,
+    IconButton,
+    FoodIcon,
+    CommuteIcon,
+    ExceptionalIcon
   }
 })
 export default class AddingExpense extends Vue {
+  expenseType: TransactionType | undefined = undefined;
+
+  setExpenseType(newType: keyof typeof TransactionType) {
+    this.expenseType = TransactionType[newType];
+  }
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.expense-type-selector {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+</style>

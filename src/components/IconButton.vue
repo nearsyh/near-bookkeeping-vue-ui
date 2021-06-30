@@ -1,5 +1,5 @@
 <template>
-  <n-button circle>
+  <n-button :circle="shape == 'circle'" :round="shape == 'round'">
     <template #icon>
       <n-icon>
         <slot></slot>
@@ -16,9 +16,14 @@ import { NButton, NIcon } from 'naive-ui';
   components: {
     NButton,
     NIcon
+  },
+  props: {
+    shape: String
   }
 })
-export default class Button extends Vue {}
+export default class IconButton extends Vue {
+  shape: String = 'circle';
+}
 </script>
 
 <style scoped></style>

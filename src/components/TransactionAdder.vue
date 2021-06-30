@@ -19,18 +19,28 @@
     </n-drawer>
     <div class="transaction-adding-buttons">
       <div class="adding-menu" v-if="isExpanded">
-        <Button class="add-button" v-on:click="addingType = 'expense'"
+        <IconButton
+          class="add-button"
+          shape="circle"
+          v-on:click="addingType = 'expense'"
           ><expense-icon
-        /></Button>
-        <Button class="add-button" v-on:click="addingType = 'investment'"
+        /></IconButton>
+        <IconButton
+          class="add-button"
+          shape="circle"
+          v-on:click="addingType = 'investment'"
           ><investment-icon
-        /></Button>
-        <Button class="add-button" v-on:click="addingType = 'other'"
+        /></IconButton>
+        <IconButton
+          class="add-button"
+          shape="circle"
+          v-on:click="addingType = 'other'"
           ><other-icon
-        /></Button>
+        /></IconButton>
       </div>
       <div class="adding-menu-toggle">
-        <Button
+        <IconButton
+          shape="circle"
           v-on:click="
             e => {
               isExpanded = !isExpanded;
@@ -40,7 +50,7 @@
         >
           <add-icon v-if="!isExpanded" />
           <close-icon v-else />
-        </Button>
+        </IconButton>
       </div>
     </div>
   </div>
@@ -49,7 +59,7 @@
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
 import { NSpace, NButton, NIcon, NDrawer, NDrawerContent } from 'naive-ui';
-import Button from './Button.vue';
+import IconButton from './IconButton.vue';
 import {
   AddSharp as AddIcon,
   CloseSharp as CloseIcon,
@@ -71,7 +81,7 @@ import AddingExpense from './AddingExpense.vue';
     ExpenseIcon,
     InvestmentIcon,
     OtherIcon,
-    Button,
+    IconButton,
     AddingExpense
   }
 })
@@ -82,14 +92,13 @@ export default class TransactionAdder extends Vue {
   dialogTitle() {
     switch (this.addingType) {
       case 'expense':
-        console.log('expense');
         return '新的支出';
       case 'investment':
         return '新的投资';
       case 'other':
         return '其他';
       default:
-        return 'WTF';
+        return '';
     }
   }
 }
