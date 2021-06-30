@@ -65,6 +65,14 @@ export function transactionTypeName(transactionType: TransactionType): String {
   }
 }
 
+export function allTransactionTypes(): TransactionType[] {
+  return Object.keys(TransactionType)
+    .filter(item => {
+      return isNaN(Number(item));
+    })
+    .map(name => TransactionType[name as keyof typeof TransactionType]);
+}
+
 export function isExpense(transactionType: TransactionType): boolean {
   return (
     transactionType === TransactionType.Shopping ||
