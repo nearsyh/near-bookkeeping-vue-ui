@@ -11,7 +11,8 @@ import { reactive } from '@vue/reactivity';
 import { Accounts } from './models/account';
 
 export const globalState = reactive({
-  accounts: new Accounts([])
+  accounts: new Accounts([]),
+  user: ''
 });
 
 @Options({
@@ -30,6 +31,7 @@ export default class App extends Vue {
 
   async beforeCreate() {
     globalState.accounts = new Accounts(await allAccounts());
+    globalState.user = '傻爸';
     this.transactions = (await getTransactions([this.monthOffset]))[0];
   }
 }

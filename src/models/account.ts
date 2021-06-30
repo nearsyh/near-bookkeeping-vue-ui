@@ -28,6 +28,14 @@ export class Account {
     return `${this.owner}${this.name}`;
   }
 
+  public hasTypeIn(accountTypes: AccountType[]): boolean {
+    return accountTypes.includes(this.accountType);
+  }
+
+  public hasOwner(owner: string): boolean {
+    return this.owner === owner;
+  }
+
   public static fromObject(obj: any) {
     return new Account(obj.id, obj.name, obj.owner, AccountType[obj.accountType as keyof typeof AccountType]);
   }
@@ -39,11 +47,22 @@ export class Accounts {
   constructor(accounts: Account[]) {
     this.accounts = new Map();
     for (const account of accounts) {
-      this.accounts.set(account.id, Account.fromObject(account));
+      this.accounts.set(account.id, account);
     }
   }
 
   public accountById(id: number): Account {
     return this.accounts.get(id)!;
+  }
+
+  public withTypes(accountTypes: AccountType[]): Account[] {
+    return [...this.accounts.values()]
+      .filter((account) => account.hasTypeIn(accountTypes));
+  }
+
+  public withTypesAndOwner(accountTypes: AccountType[], owner: string): Account[] {
+    return [...this.accounts.values()]
+      .filter((account) => account.hasTypeIn(accountTypes))
+      .filter((account) => owner === '' || account.hasOwner(owner));
   }
 }

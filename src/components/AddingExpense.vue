@@ -13,7 +13,9 @@
       /></IconButton>
     </div>
 
-    <MoneyInput :onUpdate="setValue"/>
+    <MoneyInput :onUpdate="setValue" />
+
+    <AccountsSelector :types="['Cash', 'CreditCard']" :owner="accountOwner" />
   </div>
 </template>
 
@@ -27,8 +29,10 @@ import {
 } from '@vicons/material';
 import IconButton from './IconButton.vue';
 import MoneyInput from './MoneyInput.vue';
+import AccountsSelector from './AccountsSelector.vue';
 import { TransactionType } from '@/models/transaction';
 import { Money } from '@/models/common';
+import { globalState } from '@/App.vue';
 
 @Options({
   components: {
@@ -37,7 +41,8 @@ import { Money } from '@/models/common';
     FoodIcon,
     CommuteIcon,
     ExceptionalIcon,
-    MoneyInput
+    MoneyInput,
+    AccountsSelector
   }
 })
 export default class AddingExpense extends Vue {
@@ -50,6 +55,10 @@ export default class AddingExpense extends Vue {
 
   setValue(value: string) {
     this.value = Money.fromStr(value);
+  }
+
+  get accountOwner() {
+    return globalState.user;
   }
 }
 </script>
