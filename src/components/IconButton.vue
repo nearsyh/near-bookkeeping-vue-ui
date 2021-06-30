@@ -1,5 +1,10 @@
 <template>
-  <n-button :circle="shape == 'circle'" :round="shape == 'round'" primary>
+  <n-button
+    :circle="shape == 'circle'"
+    :round="shape == 'round'"
+    :type="type"
+    :ghost="ghost"
+  >
     <template #icon>
       <n-icon>
         <slot></slot>
@@ -18,11 +23,21 @@ import { NButton, NIcon } from 'naive-ui';
     NIcon
   },
   props: {
-    shape: String
+    shape: String,
+    selected: Boolean
   }
 })
 export default class IconButton extends Vue {
   shape: String = 'circle';
+  selected: boolean = false;
+
+  get type() {
+    return this.selected ? 'primary' : 'default';
+  }
+
+  get ghost() {
+    return this.selected;
+  }
 }
 </script>
 

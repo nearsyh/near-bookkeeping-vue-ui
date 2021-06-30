@@ -1,14 +1,24 @@
 <template>
   <div class="adding-expense">
     <div class="expense-type-selector">
-      <IconButton @click="setExpenseType('Shopping')"
+      <IconButton
+        @click="setExpenseType('Food')"
+        :selected="expenseTypeStr === 'Food'"
+        ><food-icon
+      /></IconButton>
+      <IconButton
+        @click="setExpenseType('Shopping')"
+        :selected="expenseTypeStr === 'Shopping'"
         ><shopping-icon
       /></IconButton>
-      <IconButton @click="setExpenseType('Food')"><food-icon /></IconButton>
-      <IconButton @click="setExpenseType('Commute')"
+      <IconButton
+        @click="setExpenseType('Commute')"
+        :selected="expenseTypeStr === 'Commute'"
         ><commute-icon
       /></IconButton>
-      <IconButton @click="setExpenseType('Exceptional')"
+      <IconButton
+        @click="setExpenseType('Exceptional')"
+        :selected="expenseTypeStr === 'Exceptional'"
         ><exceptional-icon
       /></IconButton>
     </div>
@@ -41,7 +51,7 @@ import AccountsSelector from './AccountsSelector.vue';
 import { TransactionType } from '@/models/transaction';
 import { Money } from '@/models/common';
 import { globalState } from '@/App.vue';
-import { NButton, NSpace } from 'naive-ui';
+import { NButton, NSpace, NRadioGroup, NRadioButton } from 'naive-ui';
 import { addTransaction } from '@/lib/connector';
 import { AccountId } from '@/models/account';
 
@@ -55,16 +65,22 @@ import { AccountId } from '@/models/account';
     MoneyInput,
     AccountsSelector,
     NButton,
-    NSpace
+    NSpace,
+    NRadioGroup,
+    NRadioButton
   }
 })
 export default class AddingExpense extends Vue {
-  expenseType: TransactionType = TransactionType.Food;
+  expenseTypeStr: keyof typeof TransactionType = 'Food';
   value: Money | undefined = undefined;
   selectedAccountId: AccountId | undefined = undefined;
 
   setExpenseType(newType: keyof typeof TransactionType) {
-    this.expenseType = TransactionType[newType];
+    this.expenseTypeStr = newType;
+  }
+
+  get expenseType(): TransactionType {
+    return TransactionType[this.expenseTypeStr];
   }
 
   setValue(value: string) {
