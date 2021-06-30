@@ -142,7 +142,9 @@ export class TransactionList {
   transactions: Transaction[];
 
   constructor(transactions: Transaction[]) {
-    this.transactions = transactions;
+    this.transactions = transactions.sort(
+      (a, b) =>
+        b.timestamp - a.timestamp);
   }
 
   items(): Transaction[] {

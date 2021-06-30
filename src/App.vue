@@ -1,5 +1,5 @@
 <template>
-  <Transactions v-bind:transactions="transactions" />
+  <Transactions v-bind:transactions="transactions" :key="transactions.length" />
 </template>
 
 <script lang="ts">
@@ -12,6 +12,7 @@ import { Accounts } from './models/account';
 
 export const globalState = reactive({
   accounts: new Accounts([]),
+  transactions: new TransactionList([]),
   user: ''
 });
 
@@ -21,18 +22,21 @@ export const globalState = reactive({
   },
   watch: {
     monthOffset: async function(value: number) {
-      this.transactions = (await getTransactions([value]))[0];
+      globalState.transactions = (await getTransactions([value]))[0];
     }
   }
 })
 export default class App extends Vue {
   monthOffset: number = 0;
-  transactions: TransactionList = new TransactionList([]);
+
+  get transactions() {
+    return globalState.transactions;
+  }
 
   async beforeCreate() {
     globalState.accounts = new Accounts(await allAccounts());
     globalState.user = '傻爸';
-    this.transactions = (await getTransactions([this.monthOffset]))[0];
+    globalState.transactions = (await getTransactions([this.monthOffset]))[0];
   }
 }
 </script>
