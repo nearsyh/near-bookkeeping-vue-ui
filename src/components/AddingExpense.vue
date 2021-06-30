@@ -1,11 +1,19 @@
 <template>
   <div class="adding-expense">
     <div class="expense-type-selector">
-      <IconButton @click="setExpenseType('Shopping')"><shopping-icon /></IconButton>
+      <IconButton @click="setExpenseType('Shopping')"
+        ><shopping-icon
+      /></IconButton>
       <IconButton @click="setExpenseType('Food')"><food-icon /></IconButton>
-      <IconButton @click="setExpenseType('Commute')"><commute-icon /></IconButton>
-      <IconButton @click="setExpenseType('Exceptional')"><exceptional-icon /></IconButton>
+      <IconButton @click="setExpenseType('Commute')"
+        ><commute-icon
+      /></IconButton>
+      <IconButton @click="setExpenseType('Exceptional')"
+        ><exceptional-icon
+      /></IconButton>
     </div>
+
+    <MoneyInput :onUpdate="setValue"/>
   </div>
 </template>
 
@@ -18,7 +26,9 @@ import {
   WarningAmberSharp as ExceptionalIcon
 } from '@vicons/material';
 import IconButton from './IconButton.vue';
+import MoneyInput from './MoneyInput.vue';
 import { TransactionType } from '@/models/transaction';
+import { Money } from '@/models/common';
 
 @Options({
   components: {
@@ -26,14 +36,20 @@ import { TransactionType } from '@/models/transaction';
     IconButton,
     FoodIcon,
     CommuteIcon,
-    ExceptionalIcon
+    ExceptionalIcon,
+    MoneyInput
   }
 })
 export default class AddingExpense extends Vue {
   expenseType: TransactionType | undefined = undefined;
+  value: Money | undefined = undefined;
 
   setExpenseType(newType: keyof typeof TransactionType) {
     this.expenseType = TransactionType[newType];
+  }
+
+  setValue(value: string) {
+    this.value = Money.fromStr(value);
   }
 }
 </script>

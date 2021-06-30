@@ -7,17 +7,23 @@ export class Money {
     this.cents = cents;
   }
 
-  public static fromStr(amount: string): Money {
+  public static fromStr(amount: string): Money | undefined {
     if (!amount.includes('.')) {
       return new Money(parseInt(amount) * 100);
     }
     const parts = amount.split('.');
-    const firstPart = parseInt(parts[0]) * 100;
+    if (parts.length > 2) {
+      return undefined;
+    }
+    const firstPart = parseInt(parts[0]);
     let secondPart = parseInt(parts[1]);
+    if (isNaN(firstPart) || isNaN(secondPart)) {
+      return undefined;
+    }
     if (parts[1].length === 1) {
       secondPart *= 10;
     }
-    return new Money(firstPart + secondPart);
+    return new Money(firstPart * 100 + secondPart);
   }
 
   public toStr(): string {

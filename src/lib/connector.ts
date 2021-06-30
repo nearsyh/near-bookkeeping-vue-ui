@@ -53,7 +53,7 @@ export async function addTransaction(
   if (amount === '') {
     return;
   }
-  const delta = Money.fromStr(amount);
+  const delta = Money.fromStr(amount)!;
   return await post<any>(`${apiEndpoint}/transactions`, {
     creator,
     note,
