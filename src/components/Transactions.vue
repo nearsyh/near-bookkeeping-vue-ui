@@ -5,17 +5,20 @@
       :key="transaction.timestamp"
       :transaction="transaction"
     />
+    <TransactionAddingButtons />
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
 import TransactionItem from './TransactionItem.vue';
+import TransactionAddingButtons from './TransactionAddingButtons.vue';
 import { TransactionList } from '@/models/transaction';
 
 @Options({
   components: {
-    TransactionItem
+    TransactionItem,
+    TransactionAddingButtons
   },
   props: {
     transactions: TransactionList
