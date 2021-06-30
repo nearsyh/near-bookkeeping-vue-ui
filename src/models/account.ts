@@ -65,4 +65,8 @@ export class Accounts {
       .filter((account) => account.hasTypeIn(accountTypes))
       .filter((account) => owner === '' || account.hasOwner(owner));
   }
+
+  public expenseAccountId(): AccountId {
+    return this.withTypes([AccountType.Expense])[0].id;
+  }
 }

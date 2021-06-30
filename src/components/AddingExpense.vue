@@ -13,9 +13,17 @@
       /></IconButton>
     </div>
 
+    <AccountsSelector
+      :types="['Cash', 'CreditCard']"
+      :owner="accountOwner"
+      :onUpdate="setAccountId"
+    />
     <MoneyInput :onUpdate="setValue" />
 
-    <AccountsSelector :types="['Cash', 'CreditCard']" :owner="accountOwner" />
+    <div class="submit-buttons">
+      <n-button type="warning" @click="cancel()">取消</n-button>
+      <n-button type="primary" @click="submit()">确定</n-button>
+    </div>
   </div>
 </template>
 
@@ -33,6 +41,9 @@ import AccountsSelector from './AccountsSelector.vue';
 import { TransactionType } from '@/models/transaction';
 import { Money } from '@/models/common';
 import { globalState } from '@/App.vue';
+import { NButton, NSpace } from 'naive-ui';
+import { addTransaction } from '@/lib/connector';
+import { AccountId } from '@/models/account';
 
 @Options({
   components: {
@@ -42,12 +53,15 @@ import { globalState } from '@/App.vue';
     CommuteIcon,
     ExceptionalIcon,
     MoneyInput,
-    AccountsSelector
+    AccountsSelector,
+    NButton,
+    NSpace
   }
 })
 export default class AddingExpense extends Vue {
-  expenseType: TransactionType | undefined = undefined;
+  expenseType: TransactionType = TransactionType.Food;
   value: Money | undefined = undefined;
+  selectedAccountId: AccountId | undefined = undefined;
 
   setExpenseType(newType: keyof typeof TransactionType) {
     this.expenseType = TransactionType[newType];
@@ -57,9 +71,38 @@ export default class AddingExpense extends Vue {
     this.value = Money.fromStr(value);
   }
 
+  setAccountId(accountId: AccountId) {
+    this.selectedAccountId = accountId;
+  }
+
   get accountOwner() {
     return globalState.user;
   }
+
+  submit() {
+    if (this.value === undefined) {
+      alert('金额输入不正确');
+      return;
+    }
+    if (this.expenseType === undefined) {
+      alert('请选择支出类型');
+      return;
+    }
+    if (this.selectedAccountId === undefined) {
+      alert('请选择支出账户');
+      return;
+    }
+    addTransaction(
+      globalState.user,
+      '', // TODO: add note
+      this.expenseType!,
+      this.value.toStr(),
+      this.selectedAccountId!,
+      globalState.accounts.expenseAccountId()
+    );
+  }
+
+  cancel() {}
 }
 </script>
 
@@ -67,6 +110,12 @@ export default class AddingExpense extends Vue {
 .expense-type-selector {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
+}
+
+.submit-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 </style>

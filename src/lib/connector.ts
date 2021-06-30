@@ -57,7 +57,7 @@ export async function addTransaction(
   return await post<any>(`${apiEndpoint}/transactions`, {
     creator,
     note,
-    transactionType,
+    transactionType: TransactionType[transactionType],
     entries: [new Entry(from, delta.negative()), new Entry(to, delta)]
   });
 }

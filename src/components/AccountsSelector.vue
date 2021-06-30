@@ -3,6 +3,12 @@
     <n-select
       v-model:value="accountId"
       :options="eligibleAccountAsOptions"
+      :on-update:value="
+        newValue => {
+          accountId = newValue;
+          onUpdate(newValue);
+        }
+      "
     ></n-select>
   </div>
 </template>
@@ -19,7 +25,8 @@ import { globalState } from '@/App.vue';
   },
   props: {
     types: Array,
-    owner: String
+    owner: String,
+    onUpdate: Function
   }
 })
 export default class AccountsSelector extends Vue {
@@ -27,6 +34,7 @@ export default class AccountsSelector extends Vue {
   owner: string = '';
   accountId: number | null = null;
   eligibleAccounts: Account[] = [];
+  onUpdate!: Function;
 
   beforeCreate() {
     const accountTypes = this.types.map(type => AccountType[type]);
@@ -34,6 +42,8 @@ export default class AccountsSelector extends Vue {
       accountTypes,
       this.owner
     );
+    this.accountId = this.eligibleAccounts[0].id;
+    this.onUpdate(this.accountId);
   }
 
   get eligibleAccountAsOptions(): any[] {
