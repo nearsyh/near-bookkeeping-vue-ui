@@ -26,6 +26,7 @@
     <AccountsSelector
       :types="['Cash', 'CreditCard']"
       :owner="accountOwner"
+      title='付款账户'
       :onUpdate="setAccountId"
     />
     <MoneyInput :onUpdate="setValue" />

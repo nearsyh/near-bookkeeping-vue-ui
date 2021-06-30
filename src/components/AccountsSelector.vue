@@ -1,5 +1,8 @@
 <template>
   <div class="accounts-selector">
+    <div class="account-title">
+      {{ title }}
+    </div>
     <n-select
       v-model:value="accountId"
       :options="eligibleAccountAsOptions"
@@ -26,22 +29,23 @@ import { globalState } from '@/App.vue';
   props: {
     types: Array,
     owner: String,
-    onUpdate: Function
+    onUpdate: Function,
+    title: String
   }
 })
 export default class AccountsSelector extends Vue {
   types: (keyof typeof AccountType)[] = [];
-  owner: string = '';
+  owner: string | undefined = '';
   accountId: number | null = null;
   eligibleAccounts: Account[] = [];
   onUpdate!: Function;
 
   beforeCreate() {
     const accountTypes = this.types.map(type => AccountType[type]);
-    this.eligibleAccounts = globalState.accounts.withTypesAndOwner(
-      accountTypes,
-      this.owner
-    );
+    this.eligibleAccounts =
+      this.owner === undefined
+        ? globalState.accounts.withTypes(accountTypes)
+        : globalState.accounts.withTypesAndOwner(accountTypes, this.owner);
     this.accountId = this.eligibleAccounts[0].id;
     this.onUpdate(this.accountId);
   }
@@ -56,3 +60,15 @@ export default class AccountsSelector extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.accounts-selector {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.account-title {
+  width: 25%;
+}
+</style>

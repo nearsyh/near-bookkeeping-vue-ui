@@ -15,6 +15,10 @@
     >
       <n-drawer-content :title="dialogTitle()" closable>
         <AddingExpense v-if="addingType == 'expense'" @done="hideAdder()" />
+        <AddingInvestment
+          v-if="addingType == 'investment'"
+          @done="hideAdder()"
+        />
       </n-drawer-content>
     </n-drawer>
     <div class="transaction-adding-buttons">
@@ -68,6 +72,7 @@ import {
 } from '@vicons/material';
 import { FundOutlined as InvestmentIcon } from '@vicons/antd';
 import AddingExpense from './AddingExpense.vue';
+import AddingInvestment from './AddingInvestment.vue';
 
 @Options({
   components: {
@@ -82,7 +87,8 @@ import AddingExpense from './AddingExpense.vue';
     InvestmentIcon,
     OtherIcon,
     IconButton,
-    AddingExpense
+    AddingExpense,
+    AddingInvestment
   }
 })
 export default class TransactionAdder extends Vue {
