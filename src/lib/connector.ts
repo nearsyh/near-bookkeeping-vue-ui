@@ -49,15 +49,16 @@ export async function addTransaction(
   amount: string,
   from: AccountId,
   to: AccountId
-) {
+): Promise<Transaction | undefined> {
   if (amount === '') {
-    return;
+    return undefined;
   }
   const delta = Money.fromStr(amount)!;
-  return await post<any>(`${apiEndpoint}/transactions`, {
+  const data = await post<any>(`${apiEndpoint}/transactions`, {
     creator,
     note,
     transactionType: TransactionType[transactionType],
     entries: [new Entry(from, delta.negative()), new Entry(to, delta)]
   });
+  return Transaction.fromObject(data);
 }

@@ -26,7 +26,7 @@
     <AccountsSelector
       :types="['Cash', 'CreditCard']"
       :owner="accountOwner"
-      title='付款账户'
+      title="付款账户"
       :onUpdate="setAccountId"
     />
     <MoneyInput :onUpdate="setValue" />
@@ -96,7 +96,7 @@ export default class AddingExpense extends Vue {
     return globalState.user;
   }
 
-  submit() {
+  async submit() {
     if (this.value === undefined) {
       alert('金额输入不正确');
       return;
@@ -109,7 +109,7 @@ export default class AddingExpense extends Vue {
       alert('请选择支出账户');
       return;
     }
-    addTransaction(
+    const addedTransaction = await addTransaction(
       globalState.user,
       '', // TODO: add note
       this.expenseType!,
@@ -117,7 +117,7 @@ export default class AddingExpense extends Vue {
       this.selectedAccountId!,
       globalState.accounts.expenseAccountId()
     );
-    this.$emit('submitted');
+    this.$emit('submitted', addedTransaction);
   }
 
   cancel() {

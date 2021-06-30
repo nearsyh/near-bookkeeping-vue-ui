@@ -16,12 +16,12 @@
       <n-drawer-content :title="dialogTitle()" closable>
         <AddingExpense
           v-if="addingType == 'expense'"
-          @submitted="onSubmitted()"
+          @submitted="onSubmitted"
           @cancelled="hideAdder()"
         />
         <AddingInvestment
           v-if="addingType == 'investment'"
-          @submitted="onSubmitted()"
+          @submitted="onSubmitted"
           @cancelled="hideAdder()"
         />
       </n-drawer-content>
@@ -79,7 +79,7 @@ import { FundOutlined as InvestmentIcon } from '@vicons/antd';
 import AddingExpense from './AddingExpense.vue';
 import AddingInvestment from './AddingInvestment.vue';
 import { globalState } from '@/App.vue';
-import { getTransactions } from '@/lib/connector';
+import { Transaction } from '@/models/transaction';
 
 @Options({
   components: {
@@ -115,8 +115,8 @@ export default class TransactionAdder extends Vue {
     }
   }
 
-  async onSubmitted() {
-    globalState.transactions = (await getTransactions([0]))[0];
+  async onSubmitted(addedTransaction: Transaction) {
+    globalState.transactions.add(addedTransaction);
     this.hideAdder();
   }
 

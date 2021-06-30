@@ -126,7 +126,7 @@ export default class AddingExpense extends Vue {
     return globalState.user;
   }
 
-  submit() {
+  async submit() {
     if (this.value === undefined) {
       alert('金额输入不正确');
       return;
@@ -143,7 +143,7 @@ export default class AddingExpense extends Vue {
       alert('请选择转入账户');
       return;
     }
-    addTransaction(
+    const addedTransaction = await addTransaction(
       globalState.user,
       '', // TODO: add note
       this.investmentType!,
@@ -151,7 +151,7 @@ export default class AddingExpense extends Vue {
       this.fromAccountId!,
       this.toAccountId!
     );
-    this.$emit('submitted');
+    this.$emit('submitted', addedTransaction);
   }
 
   cancel() {

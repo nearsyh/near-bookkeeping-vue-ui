@@ -154,4 +154,8 @@ export class TransactionList {
   item(i: number): Transaction {
     return this.transactions[i];
   }
+
+  public add(newTransaction: Transaction) {
+    this.transactions.splice(0, 0, newTransaction);
+  }
 }
