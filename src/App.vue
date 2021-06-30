@@ -30,9 +30,7 @@ export default class App extends Vue {
 
   async beforeCreate() {
     globalState.accounts = new Accounts(await allAccounts());
-    this.transactions = new TransactionList(
-      (await getTransactions([this.monthOffset]))[0]
-    );
+    this.transactions = (await getTransactions([this.monthOffset]))[0];
   }
 }
 </script>

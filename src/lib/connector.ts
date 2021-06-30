@@ -1,6 +1,11 @@
 import { Account, AccountId } from '@/models/account';
 import { Money } from '@/models/common';
-import { Entry, Transaction, TransactionType } from '@/models/transaction';
+import {
+  Entry,
+  Transaction,
+  TransactionList,
+  TransactionType
+} from '@/models/transaction';
 import axios from 'axios';
 
 const endpoint = 'http://localhost:8080';
@@ -19,18 +24,32 @@ async function post<T>(url: string, body: any): Promise<T> {
 }
 
 export async function allAccounts(): Promise<Account[]> {
-  return await get<Account[]>(`${apiEndpoint}/accounts`);
+  return (await get<any[]>(`${apiEndpoint}/accounts`)).map(any =>
+    Account.fromObject(any)
+  );
 }
 
-export async function getTransactions(monthOffsets: number[]): Promise<Transaction[][]> {
-  return await post<Transaction[][]>(`${apiEndpoint}/transactions/list_by_month`, {
-    offsets: monthOffsets
-  });
+export async function getTransactions(
+  monthOffsets: number[]
+): Promise<TransactionList[]> {
+  return (
+    await post<any[][]>(`${apiEndpoint}/transactions/list_by_month`, {
+      offsets: monthOffsets
+    })
+  ).map(
+    anyList =>
+      new TransactionList(anyList.map(any => Transaction.fromObject(any)))
+  );
 }
 
 export async function addTransaction(
-  creator: string, note: string, transactionType: TransactionType, amount: string,
-  from: AccountId, to: AccountId) {
+  creator: string,
+  note: string,
+  transactionType: TransactionType,
+  amount: string,
+  from: AccountId,
+  to: AccountId
+) {
   if (amount === '') {
     return;
   }
@@ -39,9 +58,6 @@ export async function addTransaction(
     creator,
     note,
     transactionType,
-    entries: [
-      new Entry(from, delta.negative()),
-      new Entry(to, delta)
-    ]
+    entries: [new Entry(from, delta.negative()), new Entry(to, delta)]
   });
 }

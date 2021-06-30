@@ -14,8 +14,6 @@
 </template>
 
 <script lang="ts">
-import { PropType } from 'vue';
-import { Prop } from 'vue-property-decorator';
 import { Options, Vue } from 'vue-class-component';
 import { Transaction } from '@/models/transaction';
 import { globalState } from '@/App.vue';
@@ -26,7 +24,7 @@ import { globalState } from '@/App.vue';
   }
 })
 export default class TransactionItem extends Vue {
-  @Prop(Object as PropType<Transaction>) transaction!: Transaction;
+  transaction!: Transaction;
 
   get avatar(): String {
     return this.transaction.creator === '傻爸' ? 'near.jpg' : 'pang.jpg';
@@ -37,13 +35,11 @@ export default class TransactionItem extends Vue {
   }
 
   get transactionType(): String {
-    return Transaction.fromObject(this.transaction).transactionTypeName();
+    return this.transaction.transactionTypeName();
   }
 
   get description(): String {
-    return Transaction.fromObject(this.transaction).description(
-      globalState.accounts
-    );
+    return this.transaction.description(globalState.accounts);
   }
 }
 </script>
