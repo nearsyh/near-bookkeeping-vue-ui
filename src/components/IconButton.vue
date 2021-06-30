@@ -1,5 +1,5 @@
 <template>
-  <n-button :circle="shape == 'circle'" :round="shape == 'round'">
+  <n-button :circle="shape == 'circle'" :round="shape == 'round'" primary>
     <template #icon>
       <n-icon>
         <slot></slot>

@@ -100,9 +100,12 @@ export default class AddingExpense extends Vue {
       this.selectedAccountId!,
       globalState.accounts.expenseAccountId()
     );
+    this.$emit('done');
   }
 
-  cancel() {}
+  cancel() {
+    this.$emit('done');
+  }
 }
 </script>
 

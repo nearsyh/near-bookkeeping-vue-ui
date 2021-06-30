@@ -8,13 +8,13 @@
       :on-update:show="
         show => {
           if (!show) {
-            addingType = 'none';
+            hideAdder();
           }
         }
       "
     >
       <n-drawer-content :title="dialogTitle()" closable>
-        <AddingExpense v-if="addingType == 'expense'" />
+        <AddingExpense v-if="addingType == 'expense'" @done="hideAdder()" />
       </n-drawer-content>
     </n-drawer>
     <div class="transaction-adding-buttons">
@@ -100,6 +100,10 @@ export default class TransactionAdder extends Vue {
       default:
         return '';
     }
+  }
+
+  hideAdder() {
+    this.addingType = 'none';
   }
 }
 </script>
