@@ -1,5 +1,6 @@
 <template>
   <div class="transactions-list">
+    <TransactionStats />
     <TransactionItem
       v-for="transaction of transactions.items()"
       :key="transaction.timestamp"
@@ -15,12 +16,14 @@
 import { Vue, Options } from 'vue-class-component';
 import TransactionItem from './TransactionItem.vue';
 import TransactionAdder from './TransactionAdder.vue';
+import TransactionStats from './TransactionStats.vue';
 import { TransactionList } from '@/models/transaction';
 
 @Options({
   components: {
     TransactionItem,
-    TransactionAdder
+    TransactionAdder,
+    TransactionStats
   },
   props: {
     transactions: TransactionList

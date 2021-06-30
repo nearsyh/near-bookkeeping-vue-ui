@@ -1,5 +1,6 @@
 import { Timestamp, Money } from './common';
 import { AccountId, Accounts } from './account';
+import { timestampToMonthDay, timestampToYearMonth } from '@/lib/common';
 
 export enum TransactionType {
   Salary,
@@ -71,6 +72,12 @@ export function isExpense(transactionType: TransactionType): boolean {
     transactionType === TransactionType.Exceptional;
 }
 
+export function isIncome(transactionType: TransactionType): boolean {
+  return transactionType === TransactionType.Salary ||
+    transactionType === TransactionType.InvestmentIncome ||
+    transactionType === TransactionType.Interests;
+}
+
 export class Entry {
   accountId: AccountId;
   delta: Money;
@@ -98,6 +105,14 @@ export class Transaction {
     this.note = note;
     this.transactionType = transactionType;
     this.entries = entries;
+  }
+
+  get isExpense() {
+    return isExpense(this.transactionType);
+  }
+
+  get isIncome() {
+    return isIncome(this.transactionType);
   }
 
   public static fromObject(obj: any): Transaction {
@@ -136,6 +151,14 @@ export class Transaction {
   public amount(): Money {
     return this.entries[0].delta.abs();
   }
+
+  public yearMonth(): string {
+    return timestampToYearMonth(this.timestamp);
+  }
+
+  public monthDay(): string {
+    return timestampToMonthDay(this.timestamp);
+  }
 }
 
 export class TransactionList {
@@ -157,5 +180,27 @@ export class TransactionList {
 
   public add(newTransaction: Transaction) {
     this.transactions.splice(0, 0, newTransaction);
+  }
+
+  public yearMonth(): string {
+    return this.transactions.length === 0 ? '' : this.item(0).yearMonth();
+  }
+
+  public totalIncome(): Money {
+    const allIncome = this.transactions.filter((trans) => trans.isIncome);
+    let ret = new Money(0);
+    for (const income of allIncome) {
+      ret = ret.add(income.amount());
+    }
+    return ret;
+  }
+
+  public totalExpense(): Money {
+    const allExpense = this.transactions.filter((trans) => trans.isExpense);
+    let ret = new Money(0);
+    for (const expense of allExpense) {
+      ret = ret.add(expense.amount());
+    }
+    return ret;
   }
 }

@@ -43,4 +43,8 @@ export class Money {
   negative(): Money {
     return new Money(-1 * this.cents);
   }
+
+  public add(other: Money): Money {
+    return new Money(this.cents + other.cents);
+  }
 }

@@ -4,7 +4,7 @@
       <img :src="require(`@/assets/` + avatar)" />
     </div>
     <div class="transaction-details">
-      <div class="transaction-date">2020-12</div>
+      <div class="transaction-date">{{ transaction.monthDay() }}</div>
       <div>
         <span class="transaction-type">{{ transactionType }}</span>
         {{ description }}
