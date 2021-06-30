@@ -2,8 +2,8 @@
   <div class="transaction-adding-buttons">
     <div class="adding-menu" v-if="isExpanded">
       <Button class="add-button"><expense-icon /></Button>
-      <Button class="add-button"><expense-icon /></Button>
-      <Button class="add-button"><expense-icon /></Button>
+      <Button class="add-button"><investment-icon /></Button>
+      <Button class="add-button"><other-icon /></Button>
     </div>
     <div class="adding-menu-toggle">
       <Button v-on:click="isExpanded = !isExpanded">
@@ -18,8 +18,13 @@
 import { Vue, Options } from 'vue-class-component';
 import { NSpace, NButton, NIcon } from 'naive-ui';
 import Button from './Button.vue';
-import { AddSharp as AddIcon, CloseSharp as CloseIcon } from '@vicons/material';
-import { MoneyCheckAlt as ExpenseIcon } from '@vicons/fa';
+import {
+  AddSharp as AddIcon,
+  CloseSharp as CloseIcon,
+  AttachMoneySharp as ExpenseIcon,
+  MoreHorizSharp as OtherIcon
+} from '@vicons/material';
+import { FundOutlined as InvestmentIcon } from '@vicons/antd';
 
 @Options({
   components: {
@@ -29,6 +34,8 @@ import { MoneyCheckAlt as ExpenseIcon } from '@vicons/fa';
     AddIcon,
     CloseIcon,
     ExpenseIcon,
+    InvestmentIcon,
+    OtherIcon,
     Button
   }
 })
