@@ -8,7 +8,7 @@
         <span class="transaction-date">{{ date }}</span>
         <span class="transaction-type">{{ transactionType }}</span>
       </div>
-      <div class="row">
+      <div class="row" v-if="!isInitialization">
         <div class="transaction-direction">
           <span v-if="direction.length === 1" class="account">{{
             direction[0]
@@ -50,7 +50,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import { Transaction } from '@/models/transaction';
+import { Transaction, TransactionType } from '@/models/transaction';
 import { globalState } from '@/App.vue';
 import { NIcon, NDrawer, NDrawerContent } from 'naive-ui';
 import { ArrowDownwardRound as ArrowIcon } from '@vicons/material';
@@ -85,6 +85,10 @@ export default class TransactionItem extends Vue {
 
   get transactionType(): String {
     return this.transaction.transactionTypeName();
+  }
+
+  get isInitialization(): boolean {
+    return this.transaction.transactionType === TransactionType.Initialize;
   }
 
   get direction(): String[] {
