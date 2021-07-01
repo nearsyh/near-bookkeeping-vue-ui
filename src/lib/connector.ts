@@ -9,7 +9,7 @@ import {
 import axios from 'axios';
 
 // const endpoint = 'http://localhost:8080';
-const endpoint = 'https://bookkeeping-api.nearsyh.me'
+const endpoint = 'https://bookkeeping-api.nearsyh.me';
 
 const apiEndpoint = `${endpoint}/api/1.0`;
 
