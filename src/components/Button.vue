@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
-import { NButton, NIcon } from 'naive-ui';
+import { NButton } from 'naive-ui';
 
 @Options({
   components: {

@@ -13,6 +13,7 @@
     "moment": "^2.29.1",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
+    "vue-cookie-next": "^1.0.3",
     "vue-property-decorator": "^9.1.2"
   },
   "devDependencies": {

@@ -1,24 +1,32 @@
 <template>
-  <Transactions v-bind:transactions="transactions" :key="transactions.length" />
+  <Transactions
+    v-if="!shouldSelectUser"
+    v-bind:transactions="transactions"
+    :key="transactions.length"
+  />
+  <UserSelector v-else :key="user" />
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import Transactions from './components/Transactions.vue';
+import UserSelector from './components/UserSelector.vue';
 import { allAccounts, getTransactions } from '@/lib/connector';
 import { TransactionList } from './models/transaction';
 import { reactive } from '@vue/reactivity';
 import { Accounts } from './models/account';
+import { getUser, hasUser } from './lib/common';
 
 export const globalState = reactive({
   accounts: new Accounts([]),
   transactions: new TransactionList([]),
-  user: ''
+  user: getUser()
 });
 
 @Options({
   components: {
-    Transactions
+    Transactions,
+    UserSelector
   },
   watch: {
     monthOffset: async function(value: number) {
@@ -31,6 +39,14 @@ export default class App extends Vue {
 
   get transactions() {
     return globalState.transactions;
+  }
+
+  get shouldSelectUser() {
+    return !hasUser();
+  }
+
+  get user() {
+    return globalState.user;
   }
 
   async beforeCreate() {
