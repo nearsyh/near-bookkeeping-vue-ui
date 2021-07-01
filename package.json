@@ -1,5 +1,5 @@
 {
-  "name": "bookkeeping-vue-ui",
+  "name": "book-keepping-ui",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -67,5 +67,11 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "vue": {
+    "pwa": {
+      "themeColor": "#f1f1f1",
+      "name": "傻傻记账"
+    }
+  }
 }
