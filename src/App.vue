@@ -46,12 +46,11 @@ export default class App extends Vue {
   }
 
   get user() {
-    return globalState.user;
+    return hasUser() ? globalState.user.length : 0;
   }
 
   async beforeCreate() {
     globalState.accounts = new Accounts(await allAccounts());
-    globalState.user = '傻爸';
     globalState.transactions = (await getTransactions([this.monthOffset]))[0];
   }
 }
