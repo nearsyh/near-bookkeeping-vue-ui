@@ -1,6 +1,6 @@
 <template>
   <div class="accounts-selector">
-    <div class="account-title">
+    <div class="account-title" v-if="title !== ''">
       {{ title }}
     </div>
     <n-select
@@ -66,6 +66,7 @@ export default class AccountsSelector extends Vue {
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 100%;
 }
 
 .account-title {

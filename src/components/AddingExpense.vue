@@ -138,4 +138,11 @@ export default class AddingExpense extends Vue {
   flex-direction: row;
   justify-content: space-between;
 }
+
+.adding-expense {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
 </style>

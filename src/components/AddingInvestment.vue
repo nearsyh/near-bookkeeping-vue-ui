@@ -19,17 +19,20 @@
     </div>
 
     <!-- For investment income, we know the from account is 'Income' -->
-    <AccountsSelector
-      :types="fromAccountTypes"
-      :onUpdate="setFromAccountId"
-      title="转出账户"
-      v-if="investmentTypeStr !== 'InvestmentIncome'"
-    />
-    <AccountsSelector
-      :types="toAccountTypes"
-      :onUpdate="setToAccountId"
-      title="转入账户"
-    />
+    <div id="accounts">
+      <AccountsSelector
+        :types="fromAccountTypes"
+        :onUpdate="setFromAccountId"
+        title=""
+        v-if="investmentTypeStr !== 'InvestmentIncome'"
+      />
+      <n-icon size="20"><arrow-icon /></n-icon>
+      <AccountsSelector
+        :types="toAccountTypes"
+        :onUpdate="setToAccountId"
+        title=""
+      />
+    </div>
     <MoneyInput :onUpdate="setValue" />
 
     <div class="submit-buttons">
@@ -41,35 +44,26 @@
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
-import {
-  ShoppingBagOutlined as ShoppingIcon,
-  FastfoodOutlined as FoodIcon,
-  CommuteOutlined as CommuteIcon,
-  WarningAmberSharp as ExceptionalIcon
-} from '@vicons/material';
+import { ArrowDownwardRound as ArrowIcon } from '@vicons/material';
 import Button from './Button.vue';
 import MoneyInput from './MoneyInput.vue';
 import AccountsSelector from './AccountsSelector.vue';
 import { TransactionType } from '@/models/transaction';
 import { Money } from '@/models/common';
 import { globalState } from '@/App.vue';
-import { NButton, NSpace, NRadioGroup, NRadioButton } from 'naive-ui';
+import { NButton, NSpace, NIcon } from 'naive-ui';
 import { addTransaction } from '@/lib/connector';
 import { AccountId } from '@/models/account';
 
 @Options({
   components: {
-    ShoppingIcon,
     Button,
-    FoodIcon,
-    CommuteIcon,
-    ExceptionalIcon,
     MoneyInput,
     AccountsSelector,
     NButton,
     NSpace,
-    NRadioGroup,
-    NRadioButton
+    NIcon,
+    ArrowIcon
   }
 })
 export default class AddingExpense extends Vue {
@@ -171,5 +165,19 @@ export default class AddingExpense extends Vue {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.adding-investment {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+#accounts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 </style>
