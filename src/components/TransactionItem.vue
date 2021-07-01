@@ -4,7 +4,7 @@
       <img :src="require(`@/assets/` + avatar)" />
     </div>
     <div class="transaction-details">
-      <div class="transaction-date">{{ transaction.monthDay() }}</div>
+      <div class="transaction-date">{{ date }}</div>
       <div>
         <span class="transaction-type">{{ transactionType }}</span>
         {{ description }}
@@ -32,6 +32,10 @@ export default class TransactionItem extends Vue {
 
   get title(): String {
     return 'title';
+  }
+
+  get date(): String {
+    return `${this.transaction.moment.month()}.${this.transaction.moment.day()}`;
   }
 
   get transactionType(): String {

@@ -1,6 +1,12 @@
 import { Timestamp, Money } from './common';
 import { AccountId, Accounts } from './account';
-import { timestampToMonthDay, timestampToYearMonth } from '@/lib/common';
+import {
+  timestampToMonth,
+  timestampToYear,
+  timestampToDay,
+  parseTimestamp
+} from '@/lib/common';
+import { Moment } from 'moment';
 
 export enum TransactionType {
   Salary,
@@ -65,17 +71,21 @@ export function transactionTypeName(transactionType: TransactionType): String {
 }
 
 export function isExpense(transactionType: TransactionType): boolean {
-  return transactionType === TransactionType.Shopping ||
+  return (
+    transactionType === TransactionType.Shopping ||
     transactionType === TransactionType.Food ||
     transactionType === TransactionType.Commute ||
     transactionType === TransactionType.Daily ||
-    transactionType === TransactionType.Exceptional;
+    transactionType === TransactionType.Exceptional
+  );
 }
 
 export function isIncome(transactionType: TransactionType): boolean {
-  return transactionType === TransactionType.Salary ||
+  return (
+    transactionType === TransactionType.Salary ||
     transactionType === TransactionType.InvestmentIncome ||
-    transactionType === TransactionType.Interests;
+    transactionType === TransactionType.Interests
+  );
 }
 
 export class Entry {
@@ -90,7 +100,7 @@ export class Entry {
   static fromObject(obj: any) {
     return new Entry(obj.accountId, new Money(obj.delta.cents));
   }
-};
+}
 
 export class Transaction {
   timestamp: Timestamp;
@@ -99,7 +109,13 @@ export class Transaction {
   transactionType: TransactionType;
   entries: Entry[];
 
-  constructor(timestamp: number, creator: string, note: string, transactionType: TransactionType, entries: Entry[]) {
+  constructor(
+    timestamp: number,
+    creator: string,
+    note: string,
+    transactionType: TransactionType,
+    entries: Entry[]
+  ) {
     this.timestamp = timestamp;
     this.creator = creator;
     this.note = note;
@@ -118,12 +134,19 @@ export class Transaction {
   public static fromObject(obj: any): Transaction {
     const entries = obj.entries.map((entry: any) => Entry.fromObject(entry));
     return new Transaction(
-      obj.timestamp, obj.creator, obj.note,
-      TransactionType[obj.transactionType as keyof typeof TransactionType], entries);
+      obj.timestamp,
+      obj.creator,
+      obj.note,
+      TransactionType[obj.transactionType as keyof typeof TransactionType],
+      entries
+    );
   }
 
   public description(accounts: Accounts): String {
-    if (TransactionType[this.transactionType] === TransactionType[TransactionType.Initialize]) {
+    if (
+      TransactionType[this.transactionType] ===
+      TransactionType[TransactionType.Initialize]
+    ) {
       return '';
     }
 
@@ -137,11 +160,11 @@ export class Transaction {
   }
 
   public fromEntry(): Entry {
-    return this.entries.filter((entry) => entry.delta.isNegative)[0];
+    return this.entries.filter(entry => entry.delta.isNegative)[0];
   }
 
   public toEntry(): Entry {
-    return this.entries.filter((entry) => !entry.delta.isNegative)[0];
+    return this.entries.filter(entry => !entry.delta.isNegative)[0];
   }
 
   public transactionTypeName(): String {
@@ -152,12 +175,8 @@ export class Transaction {
     return this.entries[0].delta.abs();
   }
 
-  public yearMonth(): string {
-    return timestampToYearMonth(this.timestamp);
-  }
-
-  public monthDay(): string {
-    return timestampToMonthDay(this.timestamp);
+  public get moment(): Moment {
+    return parseTimestamp(this.timestamp);
   }
 }
 
@@ -165,9 +184,7 @@ export class TransactionList {
   transactions: Transaction[];
 
   constructor(transactions: Transaction[]) {
-    this.transactions = transactions.sort(
-      (a, b) =>
-        b.timestamp - a.timestamp);
+    this.transactions = transactions.sort((a, b) => b.timestamp - a.timestamp);
   }
 
   items(): Transaction[] {
@@ -182,12 +199,16 @@ export class TransactionList {
     this.transactions.splice(0, 0, newTransaction);
   }
 
-  public yearMonth(): string {
-    return this.transactions.length === 0 ? '' : this.item(0).yearMonth();
+  public year(): number {
+    return this.transactions.length === 0 ? -1 : this.item(0).moment.year();
+  }
+
+  public month(): number {
+    return this.transactions.length === 0 ? -1 : this.item(0).moment.month();
   }
 
   public totalIncome(): Money {
-    const allIncome = this.transactions.filter((trans) => trans.isIncome);
+    const allIncome = this.transactions.filter(trans => trans.isIncome);
     let ret = new Money(0);
     for (const income of allIncome) {
       ret = ret.add(income.amount());
@@ -196,7 +217,7 @@ export class TransactionList {
   }
 
   public totalExpense(): Money {
-    const allExpense = this.transactions.filter((trans) => trans.isExpense);
+    const allExpense = this.transactions.filter(trans => trans.isExpense);
     let ret = new Money(0);
     for (const expense of allExpense) {
       ret = ret.add(expense.amount());

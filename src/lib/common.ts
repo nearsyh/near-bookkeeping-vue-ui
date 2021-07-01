@@ -7,12 +7,18 @@ export function getImgUrl(name: String) {
   return images(`./${name}`);
 }
 
-export function timestampToYearMonth(timestamp: Timestamp) {
-  const time = moment(timestamp).utcOffset(8);
-  return `${time.format('YYYY')}年${time.format('MM')}月`;
+export function parseTimestamp(timestamp: Timestamp): moment.Moment {
+  return moment(timestamp).utcOffset(8);
 }
 
-export function timestampToMonthDay(timestamp: Timestamp) {
-  const time = moment(timestamp).utcOffset(8);
-  return `${time.format('MM')}月${time.format('DD')}日`;
+export function timestampToYear(timestamp: Timestamp): number {
+  return parseTimestamp(timestamp).year();
+}
+
+export function timestampToMonth(timestamp: Timestamp): number {
+  return parseTimestamp(timestamp).month();
+}
+
+export function timestampToDay(timestamp: Timestamp): number {
+  return parseTimestamp(timestamp).day();
 }

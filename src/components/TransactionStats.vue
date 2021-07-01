@@ -21,7 +21,7 @@ import { globalState } from '@/App.vue';
 })
 export default class TransactionStats extends Vue {
   get title() {
-    return `${globalState.transactions.yearMonth()}收支报告`;
+    return `${globalState.transactions.month()}月`;
   }
 
   get totalIncome() {
