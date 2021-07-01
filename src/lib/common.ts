@@ -23,15 +23,3 @@ export function hasUser(): boolean {
 export function parseTimestamp(timestamp: Timestamp): moment.Moment {
   return moment(timestamp).utcOffset(8);
 }
-
-export function timestampToYear(timestamp: Timestamp): number {
-  return parseTimestamp(timestamp).year();
-}
-
-export function timestampToMonth(timestamp: Timestamp): number {
-  return parseTimestamp(timestamp).month();
-}
-
-export function timestampToDay(timestamp: Timestamp): number {
-  return parseTimestamp(timestamp).day();
-}

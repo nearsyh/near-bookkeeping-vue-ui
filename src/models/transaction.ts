@@ -1,11 +1,6 @@
 import { Timestamp, Money } from './common';
 import { AccountId, Accounts } from './account';
-import {
-  timestampToMonth,
-  timestampToYear,
-  timestampToDay,
-  parseTimestamp
-} from '@/lib/common';
+import { parseTimestamp } from '@/lib/common';
 import { Moment } from 'moment';
 
 export enum TransactionType {
@@ -175,8 +170,20 @@ export class Transaction {
     return this.entries[0].delta.abs();
   }
 
-  public get moment(): Moment {
+  get moment(): Moment {
     return parseTimestamp(this.timestamp);
+  }
+
+  public get year(): number {
+    return this.moment.year();
+  }
+
+  public get month(): number {
+    return this.moment.month() + 1;
+  }
+
+  public get date(): number {
+    return this.moment.date();
   }
 }
 
@@ -200,11 +207,11 @@ export class TransactionList {
   }
 
   public year(): number {
-    return this.transactions.length === 0 ? -1 : this.item(0).moment.year();
+    return this.transactions.length === 0 ? -1 : this.item(0).year;
   }
 
   public month(): number {
-    return this.transactions.length === 0 ? -1 : this.item(0).moment.month();
+    return this.transactions.length === 0 ? 0 : this.item(0).month;
   }
 
   public totalIncome(): Money {

@@ -53,7 +53,7 @@ export default class TransactionItem extends Vue {
   }
 
   get date(): String {
-    return `${this.transaction.moment.month()}.${this.transaction.moment.day()}`;
+    return `${this.transaction.month}.${this.transaction.date}`;
   }
 
   get transactionType(): String {
