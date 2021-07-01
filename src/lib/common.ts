@@ -16,7 +16,6 @@ export function setUser(user: string) {
 }
 
 export function hasUser(): boolean {
-  console.log(getUser());
   return getUser() !== null && getUser() !== '';
 }
 
