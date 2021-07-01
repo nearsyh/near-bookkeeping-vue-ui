@@ -1,6 +1,6 @@
 <template>
+  <TransactionStats />
   <div class="transactions-list">
-    <TransactionStats />
     <TransactionItem
       v-for="transaction of transactions.items()"
       :key="transaction.timestamp"
@@ -36,18 +36,7 @@ export default class Transactions extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+.transactions-list {
+  padding: 0px 10px;
 }
 </style>

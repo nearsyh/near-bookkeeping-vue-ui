@@ -142,20 +142,20 @@ export class Transaction {
     );
   }
 
-  public description(accounts: Accounts): String {
+  public direction(accounts: Accounts): String[] {
     if (
       TransactionType[this.transactionType] ===
       TransactionType[TransactionType.Initialize]
     ) {
-      return '';
+      return [];
     }
 
     const fromAccount = accounts.accountById(this.fromEntry().accountId);
     const toAccount = accounts.accountById(this.toEntry().accountId);
     if (isExpense(this.transactionType)) {
-      return `${fromAccount.fullName()} -${this.amount().toStr()}元`;
+      return [fromAccount.fullName()];
     } else {
-      return `${fromAccount.fullName()}->${toAccount.fullName()} ${this.amount().toStr()}元`;
+      return [fromAccount.fullName(), toAccount.fullName()];
     }
   }
 
