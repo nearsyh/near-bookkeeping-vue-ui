@@ -34,7 +34,6 @@
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
 import { ArrowDownwardRound as ArrowIcon } from '@vicons/material';
-import IconButton from './IconButton.vue';
 import MoneyInput from './MoneyInput.vue';
 import AccountsSelector from './AccountsSelector.vue';
 import {
@@ -52,7 +51,6 @@ import { getUser } from '@/lib/common';
 @Options({
   components: {
     ArrowIcon,
-    IconButton,
     MoneyInput,
     AccountsSelector,
     NButton,

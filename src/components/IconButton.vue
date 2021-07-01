@@ -1,6 +1,6 @@
 <template>
   <Button :shape="shape" :selected="selected">
-    <n-icon>
+    <n-icon :size="size">
       <slot></slot>
     </n-icon>
   </Button>
@@ -18,12 +18,14 @@ import { NIcon } from 'naive-ui';
   },
   props: {
     shape: String,
-    selected: Boolean
+    selected: Boolean,
+    size: String
   }
 })
 export default class IconButton extends Vue {
   shape: String = 'circle';
   selected: boolean = false;
+  size: String = '';
 }
 </script>
 

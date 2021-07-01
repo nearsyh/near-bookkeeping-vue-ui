@@ -36,18 +36,21 @@
         <IconButton
           class="add-button"
           shape="circle"
+          size="20"
           v-on:click="addingType = 'expense'"
           ><expense-icon
         /></IconButton>
         <IconButton
           class="add-button"
           shape="circle"
+          size="20"
           v-on:click="addingType = 'investment'"
           ><investment-icon
         /></IconButton>
         <IconButton
           class="add-button"
           shape="circle"
+          size="20"
           v-on:click="addingType = 'other'"
           ><other-icon
         /></IconButton>
@@ -55,6 +58,7 @@
       <div class="adding-menu-toggle">
         <IconButton
           shape="circle"
+          size="20"
           v-on:click="
             e => {
               isExpanded = !isExpanded;
@@ -164,6 +168,12 @@ export default class TransactionAdder extends Vue {
 }
 
 .add-button {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.n-button {
+  width: 50px;
+  height: 50px;
+  background-color: #f1f1f1;
 }
 </style>

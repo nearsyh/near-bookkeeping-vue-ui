@@ -4,21 +4,25 @@
       <IconButton
         @click="setExpenseType('Food')"
         :selected="expenseTypeStr === 'Food'"
+        size="20"
         ><food-icon
       /></IconButton>
       <IconButton
         @click="setExpenseType('Shopping')"
         :selected="expenseTypeStr === 'Shopping'"
+        size="20"
         ><shopping-icon
       /></IconButton>
       <IconButton
         @click="setExpenseType('Commute')"
         :selected="expenseTypeStr === 'Commute'"
+        size="20"
         ><commute-icon
       /></IconButton>
       <IconButton
         @click="setExpenseType('Exceptional')"
         :selected="expenseTypeStr === 'Exceptional'"
+        size="20"
         ><exceptional-icon
       /></IconButton>
     </div>
