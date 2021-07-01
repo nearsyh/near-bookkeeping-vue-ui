@@ -1,20 +1,20 @@
 <template>
   <div class="adding-investment">
     <div class="type-selector">
-      <IconButton
+      <Button
         @click="setInvestmentType('Investment')"
         :selected="investmentTypeStr === 'Investment'"
-        >投资</IconButton
+        >投资</Button
       >
-      <IconButton
+      <Button
         @click="setInvestmentType('InvestmentIncome')"
         :selected="investmentTypeStr === 'InvestmentIncome'"
-        >收益</IconButton
+        >收益</Button
       >
-      <IconButton
+      <Button
         @click="setInvestmentType('Redemption')"
         :selected="investmentTypeStr === 'Redemption'"
-        >赎回</IconButton
+        >赎回</Button
       >
     </div>
 
@@ -47,7 +47,7 @@ import {
   CommuteOutlined as CommuteIcon,
   WarningAmberSharp as ExceptionalIcon
 } from '@vicons/material';
-import IconButton from './IconButton.vue';
+import Button from './Button.vue';
 import MoneyInput from './MoneyInput.vue';
 import AccountsSelector from './AccountsSelector.vue';
 import { TransactionType } from '@/models/transaction';
@@ -60,7 +60,7 @@ import { AccountId } from '@/models/account';
 @Options({
   components: {
     ShoppingIcon,
-    IconButton,
+    Button,
     FoodIcon,
     CommuteIcon,
     ExceptionalIcon,
