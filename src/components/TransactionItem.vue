@@ -15,7 +15,7 @@
           }}</span>
           <div class="directions" v-else>
             <span class="account">{{ direction[0] }}</span>
-            <n-icon size="20"><arrow-icon /></n-icon>
+            <n-icon size="10"><arrow-icon /></n-icon>
             <span class="account">{{ direction[1] }}</span>
           </div>
         </div>
