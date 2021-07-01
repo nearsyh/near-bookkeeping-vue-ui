@@ -7,17 +7,21 @@
       ></n-select>
     </div>
 
-    <!-- For investment income, we know the from account is 'Income' -->
-    <AccountsSelector
-      :types="fromAccountTypes"
-      :onUpdate="setFromAccountId"
-      title="转出账户"
-    />
-    <AccountsSelector
-      :types="toAccountTypes"
-      :onUpdate="setToAccountId"
-      title="转入账户"
-    />
+    <div id="accounts">
+      <AccountsSelector
+        :types="fromAccountTypes"
+        :onUpdate="setFromAccountId"
+        :owners="fromAccountOwner"
+        title=""
+      />
+      <n-icon size="20"><arrow-icon /></n-icon>
+      <AccountsSelector
+        :types="toAccountTypes"
+        :onUpdate="setToAccountId"
+        :owners="[]"
+        title=""
+      />
+    </div>
     <MoneyInput :onUpdate="setValue" />
 
     <div class="submit-buttons">
@@ -29,12 +33,7 @@
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
-import {
-  ShoppingBagOutlined as ShoppingIcon,
-  FastfoodOutlined as FoodIcon,
-  CommuteOutlined as CommuteIcon,
-  WarningAmberSharp as ExceptionalIcon
-} from '@vicons/material';
+import { ArrowDownwardRound as ArrowIcon } from '@vicons/material';
 import IconButton from './IconButton.vue';
 import MoneyInput from './MoneyInput.vue';
 import AccountsSelector from './AccountsSelector.vue';
@@ -45,22 +44,20 @@ import {
 } from '@/models/transaction';
 import { Money } from '@/models/common';
 import { globalState } from '@/App.vue';
-import { NButton, NSpace, NSelect } from 'naive-ui';
+import { NButton, NSelect, NIcon } from 'naive-ui';
 import { addTransaction } from '@/lib/connector';
 import { AccountId } from '@/models/account';
+import { getUser } from '@/lib/common';
 
 @Options({
   components: {
-    ShoppingIcon,
+    ArrowIcon,
     IconButton,
-    FoodIcon,
-    CommuteIcon,
-    ExceptionalIcon,
     MoneyInput,
     AccountsSelector,
     NButton,
-    NSpace,
-    NSelect
+    NSelect,
+    NIcon
   }
 })
 export default class AddingOther extends Vue {
@@ -78,6 +75,10 @@ export default class AddingOther extends Vue {
     });
   }
 
+  get fromAccountOwner() {
+    return [getUser(), '家庭'];
+  }
+
   setValue(value: string) {
     this.value = Money.fromStr(value);
   }
@@ -91,27 +92,27 @@ export default class AddingOther extends Vue {
   }
 
   get fromAccountTypes() {
-    switch (this.investmentType) {
-      case TransactionType.Investment:
-        return ['Cash'];
-      case TransactionType.Redemption:
-        return ['Investment'];
-      default:
-        return [];
-    }
+    return [
+      'Investment',
+      'Cash',
+      'Deposit',
+      'CreditCard',
+      'Income',
+      'Loan',
+      'OnTheFly'
+    ];
   }
 
   get toAccountTypes() {
-    switch (this.investmentType) {
-      case TransactionType.Investment:
-        return ['Investment'];
-      case TransactionType.Redemption:
-        return ['Cash'];
-      case TransactionType.InvestmentIncome:
-        return ['Investment', 'Cash'];
-      default:
-        return [];
-    }
+    return [
+      'Investment',
+      'Cash',
+      'Deposit',
+      'CreditCard',
+      'Expense',
+      'Loan',
+      'OnTheFly'
+    ];
   }
 
   get accountOwner() {
@@ -123,7 +124,7 @@ export default class AddingOther extends Vue {
       alert('金额输入不正确');
       return;
     }
-    if (this.investmentType === undefined) {
+    if (this.transactionType === undefined) {
       alert('请选择类型');
       return;
     }
@@ -136,9 +137,9 @@ export default class AddingOther extends Vue {
       return;
     }
     const addedTransaction = await addTransaction(
-      globalState.user,
+      getUser(),
       '', // TODO: add note
-      this.investmentType!,
+      this.transactionType,
       this.value.toStr(),
       this.fromAccountId!,
       this.toAccountId!
@@ -153,15 +154,23 @@ export default class AddingOther extends Vue {
 </script>
 
 <style scoped>
-.type-selector {
+.submit-buttons {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.submit-buttons {
+.adding-other {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
+  height: 100%;
+}
+
+#accounts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 </style>

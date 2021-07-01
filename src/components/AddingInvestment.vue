@@ -22,6 +22,7 @@
     <div id="accounts">
       <AccountsSelector
         :types="fromAccountTypes"
+        :owners="[accountOwner]"
         :onUpdate="setFromAccountId"
         title=""
         v-if="investmentTypeStr !== 'InvestmentIncome'"
@@ -29,6 +30,7 @@
       <n-icon size="20"><arrow-icon /></n-icon>
       <AccountsSelector
         :types="toAccountTypes"
+        :owners="[accountOwner]"
         :onUpdate="setToAccountId"
         title=""
       />
@@ -50,10 +52,10 @@ import MoneyInput from './MoneyInput.vue';
 import AccountsSelector from './AccountsSelector.vue';
 import { TransactionType } from '@/models/transaction';
 import { Money } from '@/models/common';
-import { globalState } from '@/App.vue';
 import { NButton, NSpace, NIcon } from 'naive-ui';
 import { addTransaction } from '@/lib/connector';
 import { AccountId } from '@/models/account';
+import { getUser } from '@/lib/common';
 
 @Options({
   components: {
@@ -117,7 +119,7 @@ export default class AddingExpense extends Vue {
   }
 
   get accountOwner() {
-    return globalState.user;
+    return getUser();
   }
 
   async submit() {
@@ -138,7 +140,7 @@ export default class AddingExpense extends Vue {
       return;
     }
     const addedTransaction = await addTransaction(
-      globalState.user,
+      getUser(),
       '', // TODO: add note
       this.investmentType!,
       this.value.toStr(),

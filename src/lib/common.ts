@@ -23,3 +23,7 @@ export function hasUser(): boolean {
 export function parseTimestamp(timestamp: Timestamp): moment.Moment {
   return moment(timestamp).utcOffset(8);
 }
+
+export function currentTime(): moment.Moment {
+  return parseTimestamp(moment.now());
+}

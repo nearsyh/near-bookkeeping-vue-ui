@@ -24,6 +24,11 @@
           @submitted="onSubmitted"
           @cancelled="hideAdder()"
         />
+        <AddingOther
+          v-if="addingType == 'other'"
+          @submitted="onSubmitted"
+          @cancelled="hideAdder()"
+        />
       </n-drawer-content>
     </n-drawer>
     <div class="transaction-adding-buttons">
@@ -78,6 +83,7 @@ import {
 import { FundOutlined as InvestmentIcon } from '@vicons/antd';
 import AddingExpense from './AddingExpense.vue';
 import AddingInvestment from './AddingInvestment.vue';
+import AddingOther from './AddingOther.vue';
 import { globalState } from '@/App.vue';
 import { Transaction } from '@/models/transaction';
 
@@ -95,7 +101,8 @@ import { Transaction } from '@/models/transaction';
     OtherIcon,
     IconButton,
     AddingExpense,
-    AddingInvestment
+    AddingInvestment,
+    AddingOther
   }
 })
 export default class TransactionAdder extends Vue {

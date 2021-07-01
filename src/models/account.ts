@@ -32,8 +32,8 @@ export class Account {
     return accountTypes.includes(this.accountType);
   }
 
-  public hasOwner(owner: string): boolean {
-    return this.owner === owner;
+  public hasOwner(owners: String[]): boolean {
+    return owners.includes(this.owner);
   }
 
   public static fromObject(obj: any) {
@@ -56,14 +56,17 @@ export class Accounts {
   }
 
   public withTypes(accountTypes: AccountType[]): Account[] {
+    if (accountTypes.length === 0) {
+      return [...this.accounts.values()];
+    }
     return [...this.accounts.values()]
       .filter((account) => account.hasTypeIn(accountTypes));
   }
 
-  public withTypesAndOwner(accountTypes: AccountType[], owner: string): Account[] {
+  public withTypesAndOwner(accountTypes: AccountType[], owners: string[]): Account[] {
     return [...this.accounts.values()]
       .filter((account) => account.hasTypeIn(accountTypes))
-      .filter((account) => owner === '' || account.hasOwner(owner));
+      .filter((account) => owners.length === 0 || account.hasOwner(owners));
   }
 
   public expenseAccountId(): AccountId {

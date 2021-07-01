@@ -28,14 +28,14 @@ import { globalState } from '@/App.vue';
   },
   props: {
     types: Array,
-    owner: String,
+    owners: Array,
     onUpdate: Function,
     title: String
   }
 })
 export default class AccountsSelector extends Vue {
   types: (keyof typeof AccountType)[] = [];
-  owner: string | undefined = '';
+  owners: string[] | undefined = [];
   accountId: number | null = null;
   eligibleAccounts: Account[] = [];
   onUpdate!: Function;
@@ -43,9 +43,9 @@ export default class AccountsSelector extends Vue {
   beforeCreate() {
     const accountTypes = this.types.map(type => AccountType[type]);
     this.eligibleAccounts =
-      this.owner === undefined
-        ? globalState.accounts.withTypes(accountTypes)
-        : globalState.accounts.withTypesAndOwner(accountTypes, this.owner);
+      this.owners === undefined
+        ? globalState.accounts.withTypesAndOwner(accountTypes, [])
+        : globalState.accounts.withTypesAndOwner(accountTypes, this.owners);
     this.accountId = this.eligibleAccounts[0].id;
     this.onUpdate(this.accountId);
   }

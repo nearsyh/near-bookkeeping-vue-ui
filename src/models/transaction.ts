@@ -1,7 +1,7 @@
 import { Timestamp, Money } from './common';
 import { AccountId, Accounts } from './account';
-import { parseTimestamp } from '@/lib/common';
-import { Moment } from 'moment';
+import { currentTime, parseTimestamp } from '@/lib/common';
+import moment, { Moment } from 'moment';
 
 export enum TransactionType {
   Salary,
@@ -214,12 +214,16 @@ export class TransactionList {
     this.transactions.splice(0, 0, newTransaction);
   }
 
+  get moment(): moment.Moment {
+    return this.transactions.length === 0 ? currentTime() : this.item(0).moment;
+  }
+
   public year(): number {
-    return this.transactions.length === 0 ? -1 : this.item(0).year;
+    return this.moment.year();
   }
 
   public month(): number {
-    return this.transactions.length === 0 ? 0 : this.item(0).month;
+    return this.moment.month() + 1;
   }
 
   public totalIncome(): Money {
