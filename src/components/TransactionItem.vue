@@ -25,8 +25,25 @@
   </div>
 
   <n-drawer v-model:show="showDetails" placement="bottom">
-    <n-drawer-content closable>
-      {{ transaction.note }}
+    <n-drawer-content closable :title="title">
+      <div class="transaction-details">
+        <div class="row">
+          <div class="transaction-direction">
+            <span v-if="direction.length === 1" class="account">{{
+              direction[0]
+            }}</span>
+            <div class="directions" v-else>
+              <span class="account">{{ direction[0] }}</span>
+              <n-icon size="10"><arrow-icon /></n-icon>
+              <span class="account">{{ direction[1] }}</span>
+            </div>
+          </div>
+          <span class="transaction-amount">{{ `￥${amount}` }}</span>
+          <div>
+            {{ transaction.note }}
+          </div>
+        </div>
+      </div>
     </n-drawer-content>
   </n-drawer>
 </template>
@@ -58,7 +75,8 @@ export default class TransactionItem extends Vue {
   }
 
   get title(): String {
-    return 'title';
+    const time = this.transaction.moment.format('YYYY-MM-DD HH:mm');
+    return `${this.transactionType} @ ${time}`;
   }
 
   get date(): String {

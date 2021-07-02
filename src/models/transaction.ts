@@ -180,7 +180,7 @@ export class Transaction {
     return this.entries[0].delta.abs();
   }
 
-  get moment(): Moment {
+  public get moment(): Moment {
     return parseTimestamp(this.timestamp);
   }
 
@@ -278,15 +278,15 @@ export class TransactionList {
   }
 
   public expenseGroups(): ExpenseGroup[] {
-    let expenseGroups = new Map<TransactionType, ExpenseGroup>();
+    const expenseGroups = new Map<TransactionType, ExpenseGroup>();
     for (const expenseType of expenseTypes) {
       expenseGroups.set(expenseType, new ExpenseGroup(expenseType));
     }
     for (const transaction of this.transactions) {
       if (transaction.isExpense) {
         expenseGroups
-          .get(transaction.transactionType)
-          ?.addTransaction(transaction);
+          .get(transaction.transactionType)!
+          .addTransaction(transaction);
       }
     }
     for (const expenseGroup of expenseGroups.values()) {
