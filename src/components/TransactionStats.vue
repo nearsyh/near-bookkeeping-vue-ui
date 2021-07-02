@@ -49,14 +49,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import {
-  NCard,
-  NIcon,
-  NDrawer,
-  NDrawerContent,
-  NList,
-  NListItem
-} from 'naive-ui';
+import { NCard, NIcon, NDrawer, NDrawerContent } from 'naive-ui';
 import { globalState } from '@/App.vue';
 import { InfoOutlined as InfoIcon } from '@vicons/material';
 
@@ -66,8 +59,6 @@ import { InfoOutlined as InfoIcon } from '@vicons/material';
     NIcon,
     NDrawer,
     NDrawerContent,
-    NList,
-    NListItem,
     InfoIcon
   }
 })
