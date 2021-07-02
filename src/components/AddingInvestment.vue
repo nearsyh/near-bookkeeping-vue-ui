@@ -52,7 +52,7 @@ import MoneyInput from './MoneyInput.vue';
 import AccountsSelector from './AccountsSelector.vue';
 import { TransactionType } from '@/models/transaction';
 import { Money } from '@/models/common';
-import { NButton, NSpace, NIcon } from 'naive-ui';
+import { NButton, NSpace, NIcon, useMessage } from 'naive-ui';
 import { addTransaction } from '@/lib/connector';
 import { AccountId } from '@/models/account';
 import { getUser } from '@/lib/common';
@@ -73,6 +73,7 @@ export default class AddingExpense extends Vue {
   value: Money | undefined = undefined;
   fromAccountId: AccountId | undefined = undefined;
   toAccountId: AccountId | undefined = undefined;
+  message = useMessage();
 
   setInvestmentType(newType: keyof typeof TransactionType) {
     this.investmentTypeStr = newType;
@@ -124,19 +125,19 @@ export default class AddingExpense extends Vue {
 
   async submit() {
     if (this.value === undefined) {
-      alert('金额输入不正确');
+      this.message.error('金额输入不正确');
       return;
     }
     if (this.investmentType === undefined) {
-      alert('请选择类型');
+      this.message.error('请选择类型');
       return;
     }
     if (this.fromAccountId === undefined) {
-      alert('请选择转出账户');
+      this.message.error('请选择转出账户');
       return;
     }
     if (this.toAccountId === undefined) {
-      alert('请选择转入账户');
+      this.message.error('请选择转入账户');
       return;
     }
     const addedTransaction = await addTransaction(

@@ -9,6 +9,9 @@ export class Money {
 
   public static fromStr(amount: string): Money | undefined {
     if (!amount.includes('.')) {
+      if (isNaN(parseInt(amount))) {
+        return undefined;
+      }
       return new Money(parseInt(amount) * 100);
     }
     const parts = amount.split('.');

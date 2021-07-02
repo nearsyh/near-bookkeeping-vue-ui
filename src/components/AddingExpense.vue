@@ -1,45 +1,47 @@
 <template>
-  <div class="adding-expense">
-    <div class="expense-type-selector">
-      <IconButton
-        @click="setExpenseType('Food')"
-        :selected="expenseTypeStr === 'Food'"
-        size="20"
-        ><food-icon
-      /></IconButton>
-      <IconButton
-        @click="setExpenseType('Shopping')"
-        :selected="expenseTypeStr === 'Shopping'"
-        size="20"
-        ><shopping-icon
-      /></IconButton>
-      <IconButton
-        @click="setExpenseType('Commute')"
-        :selected="expenseTypeStr === 'Commute'"
-        size="20"
-        ><commute-icon
-      /></IconButton>
-      <IconButton
-        @click="setExpenseType('Exceptional')"
-        :selected="expenseTypeStr === 'Exceptional'"
-        size="20"
-        ><exceptional-icon
-      /></IconButton>
-    </div>
+  <!-- <n-message-provider> -->
+    <div class="adding-expense">
+      <div class="expense-type-selector">
+        <IconButton
+          @click="setExpenseType('Food')"
+          :selected="expenseTypeStr === 'Food'"
+          size="20"
+          ><food-icon
+        /></IconButton>
+        <IconButton
+          @click="setExpenseType('Shopping')"
+          :selected="expenseTypeStr === 'Shopping'"
+          size="20"
+          ><shopping-icon
+        /></IconButton>
+        <IconButton
+          @click="setExpenseType('Commute')"
+          :selected="expenseTypeStr === 'Commute'"
+          size="20"
+          ><commute-icon
+        /></IconButton>
+        <IconButton
+          @click="setExpenseType('Exceptional')"
+          :selected="expenseTypeStr === 'Exceptional'"
+          size="20"
+          ><exceptional-icon
+        /></IconButton>
+      </div>
 
-    <AccountsSelector
-      :types="['Cash', 'CreditCard']"
-      :owners="[accountOwner]"
-      title="付款账户"
-      :onUpdate="setAccountId"
-    />
-    <MoneyInput :onUpdate="setValue" />
+      <AccountsSelector
+        :types="['Cash', 'CreditCard']"
+        :owners="[accountOwner]"
+        title="付款账户"
+        :onUpdate="setAccountId"
+      />
+      <MoneyInput :onUpdate="setValue" />
 
-    <div class="submit-buttons">
-      <n-button type="warning" @click="cancel()">取消</n-button>
-      <n-button type="primary" @click="submit()">确定</n-button>
+      <div class="submit-buttons">
+        <n-button type="warning" @click="cancel()">取消</n-button>
+        <n-button type="primary" @click="submit()">确定</n-button>
+      </div>
     </div>
-  </div>
+  <!-- </n-message-provider> -->
 </template>
 
 <script lang="ts">
@@ -56,7 +58,14 @@ import AccountsSelector from './AccountsSelector.vue';
 import { TransactionType } from '@/models/transaction';
 import { Money } from '@/models/common';
 import { globalState } from '@/App.vue';
-import { NButton, NSpace, NRadioGroup, NRadioButton } from 'naive-ui';
+import {
+  NButton,
+  NSpace,
+  NRadioGroup,
+  NRadioButton,
+  NMessageProvider,
+  useMessage
+} from 'naive-ui';
 import { addTransaction } from '@/lib/connector';
 import { AccountId } from '@/models/account';
 import { getUser } from '@/lib/common';
@@ -73,13 +82,15 @@ import { getUser } from '@/lib/common';
     NButton,
     NSpace,
     NRadioGroup,
-    NRadioButton
+    NRadioButton,
+    NMessageProvider
   }
 })
 export default class AddingExpense extends Vue {
   expenseTypeStr: keyof typeof TransactionType = 'Food';
   value: Money | undefined = undefined;
   selectedAccountId: AccountId | undefined = undefined;
+  message = useMessage();
 
   setExpenseType(newType: keyof typeof TransactionType) {
     this.expenseTypeStr = newType;
@@ -103,15 +114,15 @@ export default class AddingExpense extends Vue {
 
   async submit() {
     if (this.value === undefined) {
-      alert('金额输入不正确');
+      this.message.error('金额输入不正确');
       return;
     }
     if (this.expenseType === undefined) {
-      alert('请选择支出类型');
+      this.message.error('请选择支出类型');
       return;
     }
     if (this.selectedAccountId === undefined) {
-      alert('请选择支出账户');
+      this.message.error('请选择支出账户');
       return;
     }
     const addedTransaction = await addTransaction(

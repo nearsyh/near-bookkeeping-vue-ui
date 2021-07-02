@@ -1,10 +1,12 @@
 <template>
-  <Transactions
-    v-if="!shouldSelectUser"
-    v-bind:transactions="transactions"
-    :key="transactions.length"
-  />
-  <UserSelector v-else :key="user" />
+  <n-message-provider>
+    <Transactions
+      v-if="!shouldSelectUser"
+      v-bind:transactions="transactions"
+      :key="transactions.length"
+    />
+    <UserSelector v-else :key="user" />
+  </n-message-provider>
 </template>
 
 <script lang="ts">
@@ -16,6 +18,7 @@ import { TransactionList } from './models/transaction';
 import { reactive } from '@vue/reactivity';
 import { Accounts } from './models/account';
 import { getUser, hasUser } from './lib/common';
+import { NMessageProvider } from 'naive-ui';
 
 export const globalState = reactive({
   accounts: new Accounts([]),
@@ -26,7 +29,8 @@ export const globalState = reactive({
 @Options({
   components: {
     Transactions,
-    UserSelector
+    UserSelector,
+    NMessageProvider
   },
   watch: {
     monthOffset: async function(value: number) {
