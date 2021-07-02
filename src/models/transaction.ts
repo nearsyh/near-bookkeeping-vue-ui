@@ -243,6 +243,10 @@ export class TransactionList {
     this.transactions.splice(0, 0, newTransaction);
   }
 
+  public append(newTransactions: Transaction[]) {
+    this.transactions.splice(0, 0, ...newTransactions.sort((a, b) => b.timestamp - a.timestamp));
+  }
+
   get moment(): moment.Moment {
     return this.transactions.length === 0 ? currentTime() : this.item(0).moment;
   }

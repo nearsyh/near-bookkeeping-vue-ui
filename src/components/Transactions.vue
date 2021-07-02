@@ -1,7 +1,7 @@
 <template>
   <div class="transactions">
-    <TransactionStats />
-    <div class="transactions-list">
+    <TransactionStats @refresh="onRefresh()" />
+    <div class="transactions-list" ref="transactionsList">
       <TransactionItem
         v-for="transaction of transactions.items()"
         :key="transaction.timestamp"
@@ -20,6 +20,9 @@ import TransactionItem from './TransactionItem.vue';
 import TransactionAdder from './TransactionAdder.vue';
 import TransactionStats from './TransactionStats.vue';
 import { TransactionList } from '@/models/transaction';
+import { globalState } from '@/App.vue';
+import { currentTime } from '@/lib/common';
+import { getTransactionsSince } from '@/lib/connector';
 
 @Options({
   components: {
@@ -33,6 +36,14 @@ import { TransactionList } from '@/models/transaction';
 })
 export default class Transactions extends Vue {
   transactions!: TransactionList;
+
+  async onRefresh() {
+    const start = globalState.lastTimestamp + 1;
+    globalState.lastTimestamp = currentTime().valueOf();
+    const newTransactions = await getTransactionsSince(start);
+    globalState.transactions.append(newTransactions);
+    (this.$refs.transactionsList as any).scrollTop = 0;
+  }
 }
 </script>
 

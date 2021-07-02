@@ -1,5 +1,5 @@
 import { Account, AccountId } from '@/models/account';
-import { Money } from '@/models/common';
+import { Money, Timestamp } from '@/models/common';
 import {
   Entry,
   Transaction,
@@ -7,6 +7,7 @@ import {
   TransactionType
 } from '@/models/transaction';
 import axios from 'axios';
+import { currentTime } from './common';
 
 const endpoint = 'http://localhost:8080';
 // const endpoint = 'https://bookkeeping-api.nearsyh.me';
@@ -40,6 +41,17 @@ export async function getTransactions(
     anyList =>
       new TransactionList(anyList.map(any => Transaction.fromObject(any)))
   );
+}
+
+export async function getTransactionsSince(
+  timestamp: Timestamp
+): Promise<Transaction[]> {
+  return (
+    await post<any[]>(`${apiEndpoint}/transactions/list`, {
+      start: timestamp,
+      end: currentTime().valueOf()
+    })
+  ).map(any => Transaction.fromObject(any));
 }
 
 export async function addTransaction(

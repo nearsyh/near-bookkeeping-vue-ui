@@ -25,7 +25,6 @@ import { Options, Vue } from 'vue-class-component';
 export default class UserSelector extends Vue {
   onSelectUser(user: string) {
     setUser(user);
-    console.log(getUser());
     globalState.user = getUser();
   }
 }

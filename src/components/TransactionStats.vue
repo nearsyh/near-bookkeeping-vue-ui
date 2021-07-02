@@ -7,7 +7,9 @@
       </div>
 
       <div class="controllers">
-        <n-icon class="controller" size="25"><refresh-icon /></n-icon>
+        <n-icon class="controller" size="25" @click="refreshTransactions()"
+          ><refresh-icon
+        /></n-icon>
         <n-icon class="controller" size="25"><list-icon /></n-icon>
       </div>
     </div>
@@ -106,6 +108,10 @@ export default class TransactionStats extends Vue {
 
   get expenseGroupList() {
     return globalState.transactions.expenseGroups();
+  }
+
+  refreshTransactions() {
+    this.$emit('refresh');
   }
 }
 </script>

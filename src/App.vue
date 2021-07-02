@@ -17,12 +17,13 @@ import { allAccounts, getTransactions } from '@/lib/connector';
 import { TransactionList } from './models/transaction';
 import { reactive } from '@vue/reactivity';
 import { Accounts } from './models/account';
-import { getUser, hasUser } from './lib/common';
+import { currentTime, getUser, hasUser } from './lib/common';
 import { NMessageProvider } from 'naive-ui';
 
 export const globalState = reactive({
   accounts: new Accounts([]),
   transactions: new TransactionList([]),
+  lastTimestamp: 0,
   user: getUser()
 });
 
@@ -55,6 +56,7 @@ export default class App extends Vue {
 
   async beforeCreate() {
     globalState.accounts = new Accounts(await allAccounts());
+    globalState.lastTimestamp = currentTime().valueOf();
     globalState.transactions = (await getTransactions([this.monthOffset]))[0];
   }
 }
