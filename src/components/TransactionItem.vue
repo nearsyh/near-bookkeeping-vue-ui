@@ -1,11 +1,14 @@
 <template>
-  <div class="transaction-item" @click="showDetails = true">
+  <div class="transaction-item" @click="showNote = true && transaction.note !== ''">
     <div class="transaction-creator">
       <img :src="require(`@/assets/` + avatar)" />
     </div>
     <div class="transaction-details">
       <div class="header row">
-        <span class="transaction-date">{{ date }}</span>
+        <div class="left">
+          <span class="transaction-date">{{ date }}</span>
+          <n-icon v-if="transaction.note !== ''" size="12"><note-icon /></n-icon>
+        </div>
         <span class="transaction-type">{{ transactionType }}</span>
       </div>
       <div class="row" v-if="!isInitialization">
@@ -24,26 +27,22 @@
     </div>
   </div>
 
-  <n-drawer v-model:show="showDetails" placement="bottom">
-    <n-drawer-content closable :title="title">
-      <div class="transaction-details">
-        <div class="row">
-          <div class="transaction-direction">
-            <span v-if="direction.length === 1" class="account">{{
-              direction[0]
-            }}</span>
-            <div class="directions" v-else>
-              <span class="account">{{ direction[0] }}</span>
-              <n-icon size="10"><arrow-icon /></n-icon>
-              <span class="account">{{ direction[1] }}</span>
-            </div>
-          </div>
-          <span class="transaction-amount">{{ `￥${amount}` }}</span>
-        </div>
-        <div class="transaction-note" v-if="transaction.note !== ''">
+  <n-drawer
+    v-model:show="showNote"
+    style="border-radius: 10px 10px 0px 0px"
+    placement="bottom"
+    height="25vh"
+    class="transaction-note-drawer"
+  >
+    <n-drawer-content closable body-style="padding: 10px">
+      <template #header>
+        <span class="title">详情</span>
+      </template>
+      <template #default>
+        <div class="note">
           {{ transaction.note }}
         </div>
-      </div>
+      </template>
     </n-drawer-content>
   </n-drawer>
 </template>
@@ -53,7 +52,10 @@ import { Options, Vue } from 'vue-class-component';
 import { Transaction, TransactionType } from '@/models/transaction';
 import { globalState } from '@/App.vue';
 import { NIcon, NDrawer, NDrawerContent } from 'naive-ui';
-import { ArrowDownwardRound as ArrowIcon } from '@vicons/material';
+import {
+  ArrowDownwardRound as ArrowIcon,
+  NoteAltOutlined as NoteIcon
+} from '@vicons/material';
 
 @Options({
   props: {
@@ -63,12 +65,13 @@ import { ArrowDownwardRound as ArrowIcon } from '@vicons/material';
     NIcon,
     NDrawer,
     NDrawerContent,
-    ArrowIcon
+    ArrowIcon,
+    NoteIcon
   }
 })
 export default class TransactionItem extends Vue {
   transaction!: Transaction;
-  showDetails = false;
+  showNote = false;
 
   get avatar(): String {
     return this.transaction.creator === '傻爸' ? 'near.jpg' : 'pang.jpg';
@@ -107,6 +110,15 @@ export default class TransactionItem extends Vue {
   border-radius: 4px;
   padding: 10px 15px;
   margin: 10px 0px;
+  display: flex;
+  align-items: center;
+}
+
+.transaction-date {
+  margin-right: 10px;
+}
+
+.header > .left {
   display: flex;
   align-items: center;
 }
@@ -154,5 +166,15 @@ export default class TransactionItem extends Vue {
 .direction-accounts {
   display: flex;
   flex-direction: column;
+}
+
+.title {
+  font-size: 16px;
+  padding-left: 10px;
+}
+
+.note {
+  font-size: 18px;
+  color: #3e3e3e;
 }
 </style>
