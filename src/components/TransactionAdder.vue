@@ -4,6 +4,7 @@
       class="transaction-adding-dialog"
       :show="addingType != 'none'"
       height="50%"
+      style="border-radius: 10px 10px 0px 0px"
       placement="bottom"
       :on-update:show="
         show => {
