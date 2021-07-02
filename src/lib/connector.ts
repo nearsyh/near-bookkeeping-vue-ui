@@ -9,8 +9,9 @@ import {
 import axios from 'axios';
 import { currentTime } from './common';
 
-// const endpoint = 'http://localhost:8080';
-const endpoint = 'https://bookkeeping-api.nearsyh.me';
+const endpoint = process.env.NODE_ENV == 'production'
+  ? 'https://bookkeeping-api.nearsyh.me'
+  : 'http://localhost:8080';
 
 const apiEndpoint = `${endpoint}/api/1.0`;
 
