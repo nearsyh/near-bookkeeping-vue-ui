@@ -10,7 +10,7 @@
         <n-icon class="controller" size="25" @click="refreshTransactions()"
           ><refresh-icon
         /></n-icon>
-        <n-icon class="controller" size="25"><list-icon /></n-icon>
+        <!-- <n-icon class="controller" size="25"><list-icon /></n-icon> -->
       </div>
     </div>
     <div class="body">
