@@ -73,14 +73,16 @@ export function allTransactionTypes(): TransactionType[] {
     .map(name => TransactionType[name as keyof typeof TransactionType]);
 }
 
+export const expenseTypes = [
+  TransactionType.Shopping,
+  TransactionType.Food,
+  TransactionType.Commute,
+  TransactionType.Daily,
+  TransactionType.Shopping
+];
+
 export function isExpense(transactionType: TransactionType): boolean {
-  return (
-    transactionType === TransactionType.Shopping ||
-    transactionType === TransactionType.Food ||
-    transactionType === TransactionType.Commute ||
-    transactionType === TransactionType.Daily ||
-    transactionType === TransactionType.Exceptional
-  );
+  return expenseTypes.includes(transactionType);
 }
 
 export function isIncome(transactionType: TransactionType): boolean {
@@ -195,6 +197,33 @@ export class Transaction {
   }
 }
 
+export class ExpenseGroup {
+  expenseType: TransactionType;
+  count: number;
+  ratio: number;
+  total: Money;
+
+  constructor(expenseType: TransactionType) {
+    this.expenseType = expenseType;
+    this.count = 0;
+    this.ratio = 0;
+    this.total = new Money(0);
+  }
+
+  public addTransaction(transaction: Transaction) {
+    this.count += 1;
+    this.total = this.total.add(transaction.amount());
+  }
+
+  public updateRatio(totalExpense: Money) {
+    this.ratio = Math.round((100 * this.total.cents) / totalExpense.cents);
+  }
+
+  public get typeName() {
+    return transactionTypeName(this.expenseType);
+  }
+}
+
 export class TransactionList {
   transactions: Transaction[];
 
@@ -242,5 +271,29 @@ export class TransactionList {
       ret = ret.add(expense.amount());
     }
     return ret;
+  }
+
+  public totalExpenseCount(): number {
+    return this.transactions.filter(trans => trans.isExpense).length;
+  }
+
+  public expenseGroups(): ExpenseGroup[] {
+    let expenseGroups = new Map<TransactionType, ExpenseGroup>();
+    for (const expenseType of expenseTypes) {
+      expenseGroups.set(expenseType, new ExpenseGroup(expenseType));
+    }
+    for (const transaction of this.transactions) {
+      if (transaction.isExpense) {
+        expenseGroups
+          .get(transaction.transactionType)
+          ?.addTransaction(transaction);
+      }
+    }
+    for (const expenseGroup of expenseGroups.values()) {
+      expenseGroup.updateRatio(this.totalExpense());
+    }
+    return [...expenseGroups.values()]
+      .filter(v => v.count > 0)
+      .sort((a, b) => b.total.cents - a.total.cents);
   }
 }
