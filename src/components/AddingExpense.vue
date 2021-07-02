@@ -1,46 +1,47 @@
 <template>
   <!-- <n-message-provider> -->
-    <div class="adding-expense">
-      <div class="expense-type-selector">
-        <IconButton
-          @click="setExpenseType('Food')"
-          :selected="expenseTypeStr === 'Food'"
-          size="20"
-          ><food-icon
-        /></IconButton>
-        <IconButton
-          @click="setExpenseType('Shopping')"
-          :selected="expenseTypeStr === 'Shopping'"
-          size="20"
-          ><shopping-icon
-        /></IconButton>
-        <IconButton
-          @click="setExpenseType('Commute')"
-          :selected="expenseTypeStr === 'Commute'"
-          size="20"
-          ><commute-icon
-        /></IconButton>
-        <IconButton
-          @click="setExpenseType('Exceptional')"
-          :selected="expenseTypeStr === 'Exceptional'"
-          size="20"
-          ><exceptional-icon
-        /></IconButton>
-      </div>
-
-      <AccountsSelector
-        :types="['Cash', 'CreditCard']"
-        :owners="[accountOwner]"
-        title="付款账户"
-        :onUpdate="setAccountId"
-      />
-      <MoneyInput :onUpdate="setValue" />
-
-      <div class="submit-buttons">
-        <n-button type="warning" @click="cancel()">取消</n-button>
-        <n-button type="primary" @click="submit()">确定</n-button>
-      </div>
+  <div class="adding-expense">
+    <div class="expense-type-selector">
+      <IconButton
+        @click="setExpenseType('Food')"
+        :selected="expenseTypeStr === 'Food'"
+        size="20"
+        ><food-icon
+      /></IconButton>
+      <IconButton
+        @click="setExpenseType('Shopping')"
+        :selected="expenseTypeStr === 'Shopping'"
+        size="20"
+        ><shopping-icon
+      /></IconButton>
+      <IconButton
+        @click="setExpenseType('Commute')"
+        :selected="expenseTypeStr === 'Commute'"
+        size="20"
+        ><commute-icon
+      /></IconButton>
+      <IconButton
+        @click="setExpenseType('Exceptional')"
+        :selected="expenseTypeStr === 'Exceptional'"
+        size="20"
+        ><exceptional-icon
+      /></IconButton>
     </div>
+
+    <AccountsSelector
+      :types="['Cash', 'CreditCard']"
+      :owners="[accountOwner]"
+      title="付款账户"
+      :onUpdate="setAccountId"
+    />
+    <MoneyInput :onUpdate="setValue" />
+    <NoteInput :onUpdate="setNote" />
+
+    <div class="submit-buttons">
+      <n-button type="warning" @click="cancel()">取消</n-button>
+      <n-button type="primary" @click="submit()">确定</n-button>
+    </div>
+  </div>
   <!-- </n-message-provider> -->
 </template>
 
@@ -54,6 +55,7 @@ import {
 } from '@vicons/material';
 import IconButton from './IconButton.vue';
 import MoneyInput from './MoneyInput.vue';
+import NoteInput from './NoteInput.vue';
 import AccountsSelector from './AccountsSelector.vue';
 import { TransactionType } from '@/models/transaction';
 import { Money } from '@/models/common';
@@ -78,6 +80,7 @@ import { getUser } from '@/lib/common';
     CommuteIcon,
     ExceptionalIcon,
     MoneyInput,
+    NoteInput,
     AccountsSelector,
     NButton,
     NSpace,
@@ -89,6 +92,7 @@ import { getUser } from '@/lib/common';
 export default class AddingExpense extends Vue {
   expenseTypeStr: keyof typeof TransactionType = 'Food';
   value: Money | undefined = undefined;
+  note: string = '';
   selectedAccountId: AccountId | undefined = undefined;
   message = useMessage();
 
@@ -102,6 +106,10 @@ export default class AddingExpense extends Vue {
 
   setValue(value: string) {
     this.value = Money.fromStr(value);
+  }
+
+  setNote(note: string) {
+    this.note = note;
   }
 
   setAccountId(accountId: AccountId) {
@@ -127,7 +135,7 @@ export default class AddingExpense extends Vue {
     }
     const addedTransaction = await addTransaction(
       getUser(),
-      '', // TODO: add note
+      this.note || '',
       this.expenseType!,
       this.value.toStr(),
       this.selectedAccountId!,

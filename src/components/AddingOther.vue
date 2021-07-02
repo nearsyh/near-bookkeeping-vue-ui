@@ -23,6 +23,7 @@
       />
     </div>
     <MoneyInput :onUpdate="setValue" />
+    <NoteInput :onUpdate="setNote" />
 
     <div class="submit-buttons">
       <n-button type="warning" @click="cancel()">取消</n-button>
@@ -35,6 +36,7 @@
 import { Vue, Options } from 'vue-class-component';
 import { ArrowDownwardRound as ArrowIcon } from '@vicons/material';
 import MoneyInput from './MoneyInput.vue';
+import NoteInput from './NoteInput.vue';
 import AccountsSelector from './AccountsSelector.vue';
 import {
   allTransactionTypes,
@@ -52,6 +54,7 @@ import { getUser } from '@/lib/common';
   components: {
     ArrowIcon,
     MoneyInput,
+    NoteInput,
     AccountsSelector,
     NButton,
     NSelect,
@@ -61,6 +64,7 @@ import { getUser } from '@/lib/common';
 export default class AddingOther extends Vue {
   transactionType: TransactionType = TransactionType.Salary;
   value: Money | undefined = undefined;
+  note: string = '';
   fromAccountId: AccountId | undefined = undefined;
   toAccountId: AccountId | undefined = undefined;
   message = useMessage();
@@ -80,6 +84,10 @@ export default class AddingOther extends Vue {
 
   setValue(value: string) {
     this.value = Money.fromStr(value);
+  }
+
+  setNote(note: string) {
+    this.note = note;
   }
 
   setFromAccountId(accountId: AccountId) {
@@ -137,7 +145,7 @@ export default class AddingOther extends Vue {
     }
     const addedTransaction = await addTransaction(
       getUser(),
-      '', // TODO: add note
+      this.note || '',
       this.transactionType,
       this.value.toStr(),
       this.fromAccountId!,

@@ -36,6 +36,7 @@
       />
     </div>
     <MoneyInput :onUpdate="setValue" />
+    <NoteInput :onUpdate="setNote" />
 
     <div class="submit-buttons">
       <n-button type="warning" @click="cancel()">取消</n-button>
@@ -49,6 +50,7 @@ import { Vue, Options } from 'vue-class-component';
 import { ArrowDownwardRound as ArrowIcon } from '@vicons/material';
 import Button from './Button.vue';
 import MoneyInput from './MoneyInput.vue';
+import NoteInput from './NoteInput.vue';
 import AccountsSelector from './AccountsSelector.vue';
 import { TransactionType } from '@/models/transaction';
 import { Money } from '@/models/common';
@@ -61,6 +63,7 @@ import { getUser } from '@/lib/common';
   components: {
     Button,
     MoneyInput,
+    NoteInput,
     AccountsSelector,
     NButton,
     NSpace,
@@ -71,6 +74,7 @@ import { getUser } from '@/lib/common';
 export default class AddingExpense extends Vue {
   investmentTypeStr: keyof typeof TransactionType = 'Investment';
   value: Money | undefined = undefined;
+  note: string = '';
   fromAccountId: AccountId | undefined = undefined;
   toAccountId: AccountId | undefined = undefined;
   message = useMessage();
@@ -85,6 +89,10 @@ export default class AddingExpense extends Vue {
 
   setValue(value: string) {
     this.value = Money.fromStr(value);
+  }
+
+  setNote(note: string) {
+    this.note = note;
   }
 
   setFromAccountId(accountId: AccountId) {
@@ -142,7 +150,7 @@ export default class AddingExpense extends Vue {
     }
     const addedTransaction = await addTransaction(
       getUser(),
-      '', // TODO: add note
+      this.note || '',
       this.investmentType!,
       this.value.toStr(),
       this.fromAccountId!,
