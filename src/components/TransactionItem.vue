@@ -39,9 +39,9 @@
             </div>
           </div>
           <span class="transaction-amount">{{ `￥${amount}` }}</span>
-          <div>
-            {{ transaction.note }}
-          </div>
+        </div>
+        <div class="transaction-note" v-if="transaction.note !== ''">
+          {{ transaction.note }}
         </div>
       </div>
     </n-drawer-content>
