@@ -157,6 +157,7 @@ export default class TransactionStats extends Vue {
 
 .expense-container .n-icon {
   margin-left: 5px;
+  margin-bottom: 3px;
 }
 
 .expense-group {
