@@ -1,8 +1,15 @@
 <template>
   <div class="transaction-stats">
     <div class="header">
-      <span class="month">{{ month }}</span>
-      <span>月</span>
+      <div class="date">
+        <span class="month">{{ month }}</span>
+        <span>月</span>
+      </div>
+
+      <div class="controllers">
+        <n-icon class="controller" size="25"><refresh-icon /></n-icon>
+        <n-icon class="controller" size="25"><list-icon /></n-icon>
+      </div>
     </div>
     <div class="body">
       <div class="digits-container">
@@ -51,7 +58,11 @@
 import { Options, Vue } from 'vue-class-component';
 import { NCard, NIcon, NDrawer, NDrawerContent } from 'naive-ui';
 import { globalState } from '@/App.vue';
-import { InfoOutlined as InfoIcon } from '@vicons/material';
+import {
+  InfoOutlined as InfoIcon,
+  RefreshSharp as RefreshIcon,
+  ListAltSharp as ListIcon
+} from '@vicons/material';
 
 @Options({
   components: {
@@ -59,7 +70,9 @@ import { InfoOutlined as InfoIcon } from '@vicons/material';
     NIcon,
     NDrawer,
     NDrawerContent,
-    InfoIcon
+    InfoIcon,
+    RefreshIcon,
+    ListIcon
   }
 })
 export default class TransactionStats extends Vue {
@@ -107,13 +120,23 @@ export default class TransactionStats extends Vue {
 .header {
   font-size: large;
   display: flex;
-  align-items: baseline;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 5px;
+}
+
+.header > .date {
+  display: flex;
+  align-items: baseline;
 }
 
 .month {
   font-size: 40px;
   padding-right: 5px;
+}
+
+.controller {
+  margin-left: 20px;
 }
 
 .digits-container {
