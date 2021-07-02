@@ -1,13 +1,15 @@
 <template>
-  <TransactionStats />
-  <div class="transactions-list">
-    <TransactionItem
-      v-for="transaction of transactions.items()"
-      :key="transaction.timestamp"
-      :transaction="transaction"
-    />
-    <div class="transaction-adder-container">
-      <TransactionAdder />
+  <div class="transactions">
+    <TransactionStats />
+    <div class="transactions-list">
+      <TransactionItem
+        v-for="transaction of transactions.items()"
+        :key="transaction.timestamp"
+        :transaction="transaction"
+      />
+      <div class="transaction-adder-container">
+        <TransactionAdder />
+      </div>
     </div>
   </div>
 </template>
@@ -36,7 +38,15 @@ export default class Transactions extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.transactions {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .transactions-list {
   padding: 0px 10px;
+  flex-grow: 1;
+  overflow-y: auto;
 }
 </style>

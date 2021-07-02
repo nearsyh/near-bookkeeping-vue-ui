@@ -105,7 +105,7 @@ export default class TransactionItem extends Vue {
 .transaction-item {
   border: 1px solid #d8d8d8;
   border-radius: 4px;
-  padding: 10px 10px;
+  padding: 10px 15px;
   margin: 10px 0px;
   display: flex;
   align-items: center;
