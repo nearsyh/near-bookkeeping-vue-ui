@@ -1,5 +1,8 @@
 <template>
-  <div class="transaction-item" @click="showNote = true && transaction.note !== ''">
+  <div
+    class="transaction-item"
+    @click="showNote = true && transaction.note !== ''"
+  >
     <div class="transaction-creator">
       <img :src="require(`@/assets/` + avatar)" />
     </div>
@@ -7,7 +10,9 @@
       <div class="header row">
         <div class="left">
           <span class="transaction-date">{{ date }}</span>
-          <n-icon v-if="transaction.note !== ''" size="14"><note-icon /></n-icon>
+          <n-icon v-if="transaction.note !== ''" size="14"
+            ><note-icon
+          /></n-icon>
         </div>
         <span class="transaction-type">{{ transactionType }}</span>
       </div>

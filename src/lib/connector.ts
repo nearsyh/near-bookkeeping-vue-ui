@@ -9,7 +9,7 @@ import {
 import axios from 'axios';
 import { currentTime } from './common';
 
-const endpoint = process.env.NODE_ENV == 'production'
+const endpoint = process.env.NODE_ENV === 'production'
   ? 'https://bookkeeping-api.nearsyh.me'
   : 'http://localhost:8080';
 
