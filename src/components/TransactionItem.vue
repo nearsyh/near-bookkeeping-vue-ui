@@ -1,5 +1,5 @@
 <template>
-  <div class="transaction-item">
+  <div class="transaction-item" @click="showDetails = true">
     <div class="transaction-creator">
       <img :src="require(`@/assets/` + avatar)" />
     </div>
@@ -23,13 +23,19 @@
       </div>
     </div>
   </div>
+
+  <n-drawer v-model:show="showDetails" placement="bottom">
+    <n-drawer-content closable>
+      {{ transaction.note }}
+    </n-drawer-content>
+  </n-drawer>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import { Transaction } from '@/models/transaction';
 import { globalState } from '@/App.vue';
-import { NIcon } from 'naive-ui';
+import { NIcon, NDrawer, NDrawerContent } from 'naive-ui';
 import { ArrowDownwardRound as ArrowIcon } from '@vicons/material';
 
 @Options({
@@ -38,11 +44,14 @@ import { ArrowDownwardRound as ArrowIcon } from '@vicons/material';
   },
   components: {
     NIcon,
+    NDrawer,
+    NDrawerContent,
     ArrowIcon
   }
 })
 export default class TransactionItem extends Vue {
   transaction!: Transaction;
+  showDetails = false;
 
   get avatar(): String {
     return this.transaction.creator === '傻爸' ? 'near.jpg' : 'pang.jpg';

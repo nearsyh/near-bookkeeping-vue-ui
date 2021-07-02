@@ -1,37 +1,37 @@
 <template>
-  <div class="transaction-adder">
-    <n-drawer
-      class="transaction-adding-dialog"
-      :show="addingType != 'none'"
-      height="50%"
-      style="border-radius: 10px 10px 0px 0px"
-      placement="bottom"
-      :on-update:show="
-        show => {
-          if (!show) {
-            hideAdder();
-          }
+  <n-drawer
+    class="transaction-adding-dialog"
+    :show="addingType != 'none'"
+    height="50%"
+    style="border-radius: 10px 10px 0px 0px"
+    placement="bottom"
+    :on-update:show="
+      show => {
+        if (!show) {
+          hideAdder();
         }
-      "
-    >
-      <n-drawer-content :title="dialogTitle()" closable>
-        <AddingExpense
-          v-if="addingType == 'expense'"
-          @submitted="onSubmitted"
-          @cancelled="hideAdder()"
-        />
-        <AddingInvestment
-          v-if="addingType == 'investment'"
-          @submitted="onSubmitted"
-          @cancelled="hideAdder()"
-        />
-        <AddingOther
-          v-if="addingType == 'other'"
-          @submitted="onSubmitted"
-          @cancelled="hideAdder()"
-        />
-      </n-drawer-content>
-    </n-drawer>
+      }
+    "
+  >
+    <n-drawer-content :title="dialogTitle()" closable>
+      <AddingExpense
+        v-if="addingType == 'expense'"
+        @submitted="onSubmitted"
+        @cancelled="hideAdder()"
+      />
+      <AddingInvestment
+        v-if="addingType == 'investment'"
+        @submitted="onSubmitted"
+        @cancelled="hideAdder()"
+      />
+      <AddingOther
+        v-if="addingType == 'other'"
+        @submitted="onSubmitted"
+        @cancelled="hideAdder()"
+      />
+    </n-drawer-content>
+  </n-drawer>
+  <div class="transaction-adder">
     <div class="transaction-adding-buttons">
       <div class="adding-menu" v-if="isExpanded">
         <IconButton
@@ -145,8 +145,6 @@ export default class TransactionAdder extends Vue {
   z-index: 10;
   bottom: 0px;
   right: 0px;
-  height: 50%;
-  width: 100%;
 }
 
 .transaction-adding-dialog {
