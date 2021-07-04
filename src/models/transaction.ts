@@ -89,7 +89,7 @@ export function isIncome(transactionType: TransactionType): boolean {
   return (
     transactionType === TransactionType.Salary ||
     transactionType === TransactionType.InvestmentIncome ||
-    transactionType === TransactionType.Interests 
+    transactionType === TransactionType.Interests
   );
 }
 
