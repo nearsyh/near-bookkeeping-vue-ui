@@ -91,6 +91,7 @@ import AddingInvestment from './AddingInvestment.vue';
 import AddingOther from './AddingOther.vue';
 import { globalState } from '@/App.vue';
 import { Transaction } from '@/models/transaction';
+import { currentTime } from '@/lib/common';
 
 @Options({
   components: {
@@ -129,6 +130,7 @@ export default class TransactionAdder extends Vue {
 
   async onSubmitted(addedTransaction: Transaction) {
     globalState.transactions.add(addedTransaction);
+    globalState.lastTimestamp = currentTime().valueOf();
     this.hideAdder();
   }
 
