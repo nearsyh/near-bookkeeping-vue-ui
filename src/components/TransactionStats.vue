@@ -4,6 +4,7 @@
       <div class="date">
         <span class="month">{{ month }}</span>
         <span>月</span>
+        <span class="birthday" v-if="isBirthday">傻胖生日快乐 &#x1f497;&#127874;</span>
       </div>
 
       <div class="controllers">
@@ -65,6 +66,7 @@ import {
   RefreshSharp as RefreshIcon,
   ListAltSharp as ListIcon
 } from '@vicons/material';
+import { currentTime } from '@/lib/common';
 
 @Options({
   components: {
@@ -82,6 +84,11 @@ export default class TransactionStats extends Vue {
 
   get month() {
     return globalState.transactions.month();
+  }
+
+  get isBirthday() {
+    const date = currentTime();
+    return date.date() === 6 && date.month() + 1 === 7;
   }
 
   get expenseClass() {
@@ -139,6 +146,10 @@ export default class TransactionStats extends Vue {
 .month {
   font-size: 40px;
   padding-right: 5px;
+}
+
+.birthday {
+  margin-left: 10px;
 }
 
 .controller {
