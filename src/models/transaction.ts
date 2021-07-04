@@ -78,7 +78,7 @@ export const expenseTypes = [
   TransactionType.Food,
   TransactionType.Commute,
   TransactionType.Daily,
-  TransactionType.Shopping
+  TransactionType.Exceptional
 ];
 
 export function isExpense(transactionType: TransactionType): boolean {
@@ -89,7 +89,7 @@ export function isIncome(transactionType: TransactionType): boolean {
   return (
     transactionType === TransactionType.Salary ||
     transactionType === TransactionType.InvestmentIncome ||
-    transactionType === TransactionType.Interests
+    transactionType === TransactionType.Interests 
   );
 }
 
