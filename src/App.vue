@@ -1,11 +1,11 @@
 <template>
   <n-message-provider>
     <Transactions
-      v-if="!shouldSelectUser"
+      v-if="user !== ''"
       v-bind:transactions="transactions"
       :key="transactions.length"
     />
-    <UserSelector v-else :key="user" />
+    <UserSelector v-else @updated="onUserSelected()" />
   </n-message-provider>
 </template>
 
@@ -17,7 +17,7 @@ import { allAccounts, getTransactions } from '@/lib/connector';
 import { TransactionList } from './models/transaction';
 import { reactive } from '@vue/reactivity';
 import { Accounts } from './models/account';
-import { currentTime, getUser, hasUser } from './lib/common';
+import { currentTime, getUser } from './lib/common';
 import { NMessageProvider } from 'naive-ui';
 
 export const globalState = reactive({
@@ -41,17 +41,14 @@ export const globalState = reactive({
 })
 export default class App extends Vue {
   monthOffset: number = 0;
+  user: string = globalState.user;
 
   get transactions() {
     return globalState.transactions;
   }
 
-  get shouldSelectUser() {
-    return !hasUser();
-  }
-
-  get user() {
-    return hasUser() ? globalState.user.length : 0;
+  onUserSelected() {
+    this.user = getUser();
   }
 
   async beforeCreate() {

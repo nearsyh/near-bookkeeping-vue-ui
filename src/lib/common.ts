@@ -8,7 +8,7 @@ export function getImgUrl(name: String) {
 }
 
 export function getUser(): string {
-  return VueCookieNext.getCookie('user');
+  return VueCookieNext.getCookie('user') || '';
 }
 
 export function setUser(user: string) {

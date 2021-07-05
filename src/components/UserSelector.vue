@@ -26,6 +26,7 @@ export default class UserSelector extends Vue {
   onSelectUser(user: string) {
     setUser(user);
     globalState.user = getUser();
+    this.$emit('updated');
   }
 }
 </script>
