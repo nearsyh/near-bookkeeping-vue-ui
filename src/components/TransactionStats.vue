@@ -69,8 +69,8 @@
       <n-drawer-content title="账户余额" closable>
         <div class="balance-list">
           <div class="balance">
-            <div class="balance-title">净资产</div>
-            <div class="balance-amount">￥{{ totalAsset.toStr() }}</div>
+            <div class="balance-title bold">净资产</div>
+            <div class="balance-amount bold">￥{{ totalAsset.toStr() }}</div>
           </div>
           <div
             class="balance"
@@ -222,5 +222,9 @@ export default class TransactionStats extends Vue {
 
 .warning {
   color: red;
+}
+
+.bold {
+  font-weight: bold;
 }
 </style>
