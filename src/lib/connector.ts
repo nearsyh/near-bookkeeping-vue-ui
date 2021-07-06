@@ -1,4 +1,5 @@
 import { Account, AccountId } from '@/models/account';
+import { Balance } from '@/models/balance';
 import { Money, Timestamp } from '@/models/common';
 import {
   Entry,
@@ -9,9 +10,10 @@ import {
 import axios from 'axios';
 import { currentTime } from './common';
 
-const endpoint = process.env.NODE_ENV === 'production'
-  ? 'https://bookkeeping-api.nearsyh.me'
-  : 'http://localhost:8080';
+const endpoint =
+  process.env.NODE_ENV === 'production'
+    ? 'https://bookkeeping-api.nearsyh.me'
+    : 'http://localhost:8080';
 
 const apiEndpoint = `${endpoint}/api/1.0`;
 
@@ -74,4 +76,9 @@ export async function addTransaction(
     entries: [new Entry(from, delta.negative()), new Entry(to, delta)]
   });
   return Transaction.fromObject(data);
+}
+
+export async function getBalance(): Promise<Balance> {
+  const data = await get<any>(`${apiEndpoint}/balance`);
+  return Balance.fromObject(data);
 }

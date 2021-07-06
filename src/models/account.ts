@@ -8,8 +8,8 @@ export enum AccountType {
   Income,
   Expense,
   Loan,
-  OnTheFly,
-};
+  OnTheFly
+}
 
 export class Account {
   id: AccountId;
@@ -17,7 +17,12 @@ export class Account {
   accountType: AccountType;
   owner: String;
 
-  constructor(id: AccountId, name: String, owner: String, accountType: AccountType) {
+  constructor(
+    id: AccountId,
+    name: String,
+    owner: String,
+    accountType: AccountType
+  ) {
     this.id = id;
     this.name = name;
     this.owner = owner;
@@ -36,10 +41,32 @@ export class Account {
     return owners.includes(this.owner);
   }
 
-  public static fromObject(obj: any) {
-    return new Account(obj.id, obj.name, obj.owner, AccountType[obj.accountType as keyof typeof AccountType]);
+  public isRealAccount(): boolean {
+    return (
+      this.accountType !== AccountType.Income &&
+      this.accountType !== AccountType.Expense
+    );
   }
-};
+
+  public isAsset(): boolean {
+    return (
+      this.accountType === AccountType.Cash ||
+      this.accountType === AccountType.Deposit ||
+      this.accountType === AccountType.CreditCard ||
+      this.accountType === AccountType.Investment ||
+      this.accountType === AccountType.OnTheFly
+    );
+  }
+
+  public static fromObject(obj: any) {
+    return new Account(
+      obj.id,
+      obj.name,
+      obj.owner,
+      AccountType[obj.accountType as keyof typeof AccountType]
+    );
+  }
+}
 
 export class Accounts {
   accounts: Map<number, Account>;
@@ -59,14 +86,18 @@ export class Accounts {
     if (accountTypes.length === 0) {
       return [...this.accounts.values()];
     }
-    return [...this.accounts.values()]
-      .filter((account) => account.hasTypeIn(accountTypes));
+    return [...this.accounts.values()].filter(account =>
+      account.hasTypeIn(accountTypes)
+    );
   }
 
-  public withTypesAndOwner(accountTypes: AccountType[], owners: string[]): Account[] {
+  public withTypesAndOwner(
+    accountTypes: AccountType[],
+    owners: string[]
+  ): Account[] {
     return [...this.accounts.values()]
-      .filter((account) => account.hasTypeIn(accountTypes))
-      .filter((account) => owners.length === 0 || account.hasOwner(owners));
+      .filter(account => account.hasTypeIn(accountTypes))
+      .filter(account => owners.length === 0 || account.hasOwner(owners));
   }
 
   public expenseAccountId(): AccountId {

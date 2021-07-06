@@ -213,6 +213,20 @@ export class Transaction {
     ret.entries = this.entries.map((entry) => entry.clone());
     return ret;
   }
+
+  public affectAccount(accountId: AccountId): boolean {
+    return (
+      this.entries.find(entry => entry.accountId === accountId) !== undefined
+    );
+  }
+
+  public deltaForAccount(accountId: AccountId): Money {
+    const entry = this.entries.find(entry => entry.accountId === accountId);
+    if (entry !== undefined) {
+      return entry.delta;
+    }
+    return new Money(0);
+  }
 }
 
 export class ExpenseGroup {

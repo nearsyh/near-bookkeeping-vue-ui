@@ -4,14 +4,18 @@
       <div class="date">
         <span class="month">{{ month }}</span>
         <span>月</span>
-        <span class="birthday" v-if="isBirthday">傻胖生日快乐 &#x1f497;&#127874;</span>
+        <span class="birthday" v-if="isBirthday"
+          >傻胖生日快乐 &#x1f497;&#127874;</span
+        >
       </div>
 
       <div class="controllers">
         <n-icon class="controller" size="25" @click="refreshTransactions()"
           ><refresh-icon
         /></n-icon>
-        <!-- <n-icon class="controller" size="25"><list-icon /></n-icon> -->
+        <n-icon class="controller" size="25" @click="showBalance = true"
+          ><list-icon
+        /></n-icon>
       </div>
     </div>
     <div class="body">
@@ -54,6 +58,31 @@
         </div>
       </n-drawer-content>
     </n-drawer>
+
+    <n-drawer
+      class="balance-stats"
+      v-model:show="showBalance"
+      height="50%"
+      style="border-radius: 10px 10px 0px 0px"
+      placement="bottom"
+    >
+      <n-drawer-content title="账户余额" closable>
+        <div class="balance-list">
+          <div class="balance">
+            <div class="balance-title">净资产</div>
+            <div class="balance-amount">￥{{ totalAsset.toStr() }}</div>
+          </div>
+          <div
+            class="balance"
+            v-for="balance of balancesList"
+            :key="balance.accountName"
+          >
+            <div class="balance-title">{{ balance.accountName }}</div>
+            <div class="balance-amount">￥{{ balance.value.toStr() }}</div>
+          </div>
+        </div>
+      </n-drawer-content>
+    </n-drawer>
   </div>
 </template>
 
@@ -81,6 +110,7 @@ import { currentTime } from '@/lib/common';
 })
 export default class TransactionStats extends Vue {
   showExpenseStats: boolean = false;
+  showBalance: boolean = false;
 
   get month() {
     return globalState.transactions.month();
@@ -115,6 +145,14 @@ export default class TransactionStats extends Vue {
 
   get expenseGroupList() {
     return globalState.transactions.expenseGroups();
+  }
+
+  get balancesList() {
+    return globalState.balance.asBalanceStats(globalState.accounts);
+  }
+
+  get totalAsset() {
+    return globalState.balance.totalAsset(globalState.accounts);
   }
 
   refreshTransactions() {
@@ -153,7 +191,7 @@ export default class TransactionStats extends Vue {
 }
 
 .controller {
-  margin-left: 20px;
+  margin-left: 15px;
 }
 
 .digits-container {
@@ -171,7 +209,8 @@ export default class TransactionStats extends Vue {
   margin-bottom: 3px;
 }
 
-.expense-group {
+.expense-group,
+.balance {
   display: flex;
   justify-content: space-between;
   padding: 10px 10px;

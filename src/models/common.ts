@@ -8,6 +8,10 @@ export class Money {
   }
 
   public static fromStr(amount: string): Money | undefined {
+    if (amount.startsWith('-')) {
+      return Money.fromStr(amount.substr(1))?.negative();
+    }
+
     if (!amount.includes('.')) {
       if (isNaN(parseInt(amount))) {
         return undefined;
@@ -30,6 +34,9 @@ export class Money {
   }
 
   public toStr(): string {
+    if (this.cents < 0) {
+      return `-${this.negative().toStr()}`;
+    }
     const secondPart = this.cents % 100;
     const firstPart = (this.cents - secondPart) / 100;
     return `${firstPart}.${secondPart < 10 ? '0' : ''}${secondPart}`;

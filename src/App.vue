@@ -14,17 +14,19 @@
 import { Options, Vue } from 'vue-class-component';
 import Transactions from './components/Transactions.vue';
 import UserSelector from './components/UserSelector.vue';
-import { allAccounts } from '@/lib/connector';
+import { allAccounts, getBalance } from '@/lib/connector';
 import { getTransactions } from '@/lib/fetcher';
 import { TransactionList } from './models/transaction';
 import { reactive } from '@vue/reactivity';
 import { Accounts } from './models/account';
 import { getUser } from './lib/common';
 import { NMessageProvider } from 'naive-ui';
+import { Balance } from './models/balance';
 
 export const globalState = reactive({
   accounts: new Accounts([]),
   transactions: new TransactionList([]),
+  balance: new Balance([]),
   user: getUser()
 });
 
@@ -57,6 +59,7 @@ export default class App extends Vue {
     this.loading = true;
     globalState.accounts = new Accounts(await allAccounts());
     globalState.transactions = await getTransactions();
+    globalState.balance = await getBalance();
     this.loading = false;
   }
 }

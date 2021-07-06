@@ -50,7 +50,11 @@ export default class Transactions extends Vue {
 
   async onRefresh() {
     this.refreshing = true;
+    const length = globalState.transactions.items().length;
     globalState.transactions = await getTransactions();
+    globalState.balance.addTransactions(
+      globalState.transactions.items().slice(length)
+    );
     this.refreshing = false;
     (this.$refs.transactionsList as any).scrollTop = 0;
   }
@@ -74,5 +78,4 @@ export default class Transactions extends Vue {
 .transactions-loading {
   padding: 20px 10px 0px 10px;
 }
-
 </style>
