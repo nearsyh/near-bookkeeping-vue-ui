@@ -4,6 +4,7 @@
       v-if="user !== ''"
       v-bind:transactions="transactions"
       :key="transactions.length"
+      :loading="loading"
     />
     <UserSelector v-else @updated="onUserSelected()" />
   </n-message-provider>
@@ -13,17 +14,17 @@
 import { Options, Vue } from 'vue-class-component';
 import Transactions from './components/Transactions.vue';
 import UserSelector from './components/UserSelector.vue';
-import { allAccounts, getTransactions } from '@/lib/connector';
+import { allAccounts } from '@/lib/connector';
+import { getTransactions } from '@/lib/fetcher';
 import { TransactionList } from './models/transaction';
 import { reactive } from '@vue/reactivity';
 import { Accounts } from './models/account';
-import { currentTime, getUser } from './lib/common';
+import { getUser } from './lib/common';
 import { NMessageProvider } from 'naive-ui';
 
 export const globalState = reactive({
   accounts: new Accounts([]),
   transactions: new TransactionList([]),
-  lastTimestamp: 0,
   user: getUser()
 });
 
@@ -35,13 +36,14 @@ export const globalState = reactive({
   },
   watch: {
     monthOffset: async function(value: number) {
-      globalState.transactions = (await getTransactions([value]))[0];
+      globalState.transactions = await getTransactions();
     }
   }
 })
 export default class App extends Vue {
   monthOffset: number = 0;
   user: string = globalState.user;
+  loading: boolean = false;
 
   get transactions() {
     return globalState.transactions;
@@ -52,9 +54,10 @@ export default class App extends Vue {
   }
 
   async beforeCreate() {
+    this.loading = true;
     globalState.accounts = new Accounts(await allAccounts());
-    globalState.lastTimestamp = currentTime().valueOf();
-    globalState.transactions = (await getTransactions([this.monthOffset]))[0];
+    globalState.transactions = await getTransactions();
+    this.loading = false;
   }
 }
 </script>

@@ -105,6 +105,12 @@ export class Entry {
   static fromObject(obj: any) {
     return new Entry(obj.accountId, new Money(obj.delta.cents));
   }
+
+  public clone(): any {
+    const ret = Object.assign({}, this);
+    ret.delta = this.delta.clone();
+    return ret;
+  }
 }
 
 export class Transaction {
@@ -142,7 +148,9 @@ export class Transaction {
       obj.timestamp,
       obj.creator,
       obj.note,
-      TransactionType[obj.transactionType as keyof typeof TransactionType],
+      typeof obj.transactionType === 'number'
+        ? obj.transactionType
+        : TransactionType[obj.transactionType as keyof typeof TransactionType],
       entries
     );
   }
@@ -180,6 +188,10 @@ export class Transaction {
     return this.entries[0].delta.abs();
   }
 
+  public isEarlierThan(moment: Moment): boolean {
+    return this.moment.isBefore(moment);
+  }
+
   public get moment(): Moment {
     return parseTimestamp(this.timestamp);
   }
@@ -194,6 +206,12 @@ export class Transaction {
 
   public get date(): number {
     return this.moment.date();
+  }
+
+  public clone(): any {
+    const ret = Object.assign({}, this);
+    ret.entries = this.entries.map((entry) => entry.clone());
+    return ret;
   }
 }
 
@@ -231,7 +249,7 @@ export class TransactionList {
     this.transactions = transactions.sort((a, b) => b.timestamp - a.timestamp);
   }
 
-  items(): Transaction[] {
+  public items(): Transaction[] {
     return this.transactions;
   }
 
@@ -244,7 +262,17 @@ export class TransactionList {
   }
 
   public append(newTransactions: Transaction[]) {
-    this.transactions.splice(0, 0, ...newTransactions.sort((a, b) => b.timestamp - a.timestamp));
+    this.transactions.splice(
+      0,
+      0,
+      ...newTransactions.sort((a, b) => b.timestamp - a.timestamp)
+    );
+  }
+
+  public truncateTo(time: Moment) {
+    this.transactions = this.transactions.filter(
+      trans => !trans.isEarlierThan(time)
+    );
   }
 
   get moment(): moment.Moment {

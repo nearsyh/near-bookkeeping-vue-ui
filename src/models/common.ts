@@ -50,4 +50,8 @@ export class Money {
   public add(other: Money): Money {
     return new Money(this.cents + other.cents);
   }
+
+  public clone(): any {
+    return new Money(this.cents);
+  }
 }

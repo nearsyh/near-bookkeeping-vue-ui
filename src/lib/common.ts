@@ -26,3 +26,7 @@ export function parseTimestamp(timestamp: Timestamp): moment.Moment {
 export function currentTime(): moment.Moment {
   return parseTimestamp(moment.now());
 }
+
+export function currentMonthStart(): moment.Moment {
+  return moment().utcOffset(8).startOf('month');
+}

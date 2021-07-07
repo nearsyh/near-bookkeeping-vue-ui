@@ -31,7 +31,7 @@ export async function allAccounts(): Promise<Account[]> {
   );
 }
 
-export async function getTransactions(
+export async function getTransactionsByMonth(
   monthOffsets: number[]
 ): Promise<TransactionList[]> {
   return (
