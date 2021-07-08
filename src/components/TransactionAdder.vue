@@ -175,6 +175,6 @@ export default class TransactionAdder extends Vue {
 .n-button {
   width: 50px;
   height: 50px;
-  background-color: #f1f1f1;
+  background-color: #f1f1f1 !important;
 }
 </style>
