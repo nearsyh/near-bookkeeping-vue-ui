@@ -30,6 +30,7 @@ import { TransactionList } from '@/models/transaction';
 import { globalState } from '@/App.vue';
 import { getTransactions } from '@/lib/fetcher';
 import { NSkeleton } from 'naive-ui';
+import { getBalance } from '@/lib/connector';
 
 @Options({
   components: {
@@ -50,11 +51,8 @@ export default class Transactions extends Vue {
 
   async onRefresh() {
     this.refreshing = true;
-    const length = globalState.transactions.items().length;
     globalState.transactions = await getTransactions();
-    globalState.balance.addTransactions(
-      globalState.transactions.items().slice(length)
-    );
+    globalState.balance = await getBalance();
     this.refreshing = false;
     (this.$refs.transactionsList as any).scrollTop = 0;
   }

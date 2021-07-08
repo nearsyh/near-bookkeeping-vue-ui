@@ -90,8 +90,8 @@ import AddingExpense from './AddingExpense.vue';
 import AddingInvestment from './AddingInvestment.vue';
 import AddingOther from './AddingOther.vue';
 import { globalState } from '@/App.vue';
-import { Transaction } from '@/models/transaction';
-import { getTransactions, saveTransactions } from '@/lib/fetcher';
+import { getTransactions } from '@/lib/fetcher';
+import { getBalance } from '@/lib/connector';
 
 @Options({
   components: {
@@ -128,11 +128,9 @@ export default class TransactionAdder extends Vue {
     }
   }
 
-  async onSubmitted(addedTransaction: Transaction) {
+  async onSubmitted() {
     globalState.transactions = await getTransactions();
-    globalState.transactions.add(addedTransaction);
-    globalState.balance.addTransaction(addedTransaction);
-    await saveTransactions(globalState.transactions);
+    globalState.balance = await getBalance();
     this.hideAdder();
   }
 
