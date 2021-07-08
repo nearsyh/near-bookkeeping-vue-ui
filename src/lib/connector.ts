@@ -27,10 +27,20 @@ async function post<T>(url: string, body: any): Promise<T> {
   return response.data;
 }
 
+function accountWeight(account: Account): number {
+  if (account.id <= 2) {
+    return 100 - account.id;
+  }
+  if (account.id === 25) {
+    return 90;
+  }
+  return 90 - account.id;
+}
+
 export async function allAccounts(): Promise<Account[]> {
-  return (await get<any[]>(`${apiEndpoint}/accounts`)).map(any =>
-    Account.fromObject(any)
-  );
+  return (await get<any[]>(`${apiEndpoint}/accounts`))
+    .map(any => Account.fromObject(any))
+    .sort((a, b) => accountWeight(b) - accountWeight(a));
 }
 
 export async function getTransactionsByMonth(
