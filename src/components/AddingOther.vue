@@ -143,6 +143,7 @@ export default class AddingOther extends Vue {
       this.message.error('请选择转入账户');
       return;
     }
+    this.$emit('submitting');
     const addedTransaction = await addTransaction(
       getUser(),
       this.note || '',

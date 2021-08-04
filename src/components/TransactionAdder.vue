@@ -17,16 +17,19 @@
       <AddingExpense
         v-if="addingType == 'expense'"
         @submitted="onSubmitted"
+        @submitting="onSubmitting"
         @cancelled="hideAdder()"
       />
       <AddingInvestment
         v-if="addingType == 'investment'"
         @submitted="onSubmitted"
+        @submitting="onSubmitting"
         @cancelled="hideAdder()"
       />
       <AddingOther
         v-if="addingType == 'other'"
         @submitted="onSubmitted"
+        @submitting="onSubmitting"
         @cancelled="hideAdder()"
       />
     </n-drawer-content>
@@ -129,10 +132,13 @@ export default class TransactionAdder extends Vue {
     }
   }
 
+  async onSubmitting() {
+    this.hideAdder();
+  }
+
   async onSubmitted(transaction: Transaction) {
     globalState.transactions.add(transaction);
     globalState.balance.addTransaction(transaction);
-    this.hideAdder();
     getTransactions().then(list => {
       globalState.transactions = list;
     });
