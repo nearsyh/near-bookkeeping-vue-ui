@@ -15,7 +15,7 @@ import { Options, Vue } from 'vue-class-component';
 import Transactions from './components/Transactions.vue';
 import UserSelector from './components/UserSelector.vue';
 import { allAccounts, getBalance } from '@/lib/connector';
-import { getTransactions } from '@/lib/fetcher';
+import { getTransactions, getTransactionsFromLocal } from '@/lib/fetcher';
 import { TransactionList } from './models/transaction';
 import { reactive } from '@vue/reactivity';
 import { Accounts } from './models/account';
@@ -58,9 +58,14 @@ export default class App extends Vue {
   async beforeCreate() {
     this.loading = true;
     globalState.accounts = new Accounts(await allAccounts());
-    globalState.transactions = await getTransactions();
-    globalState.balance = await getBalance();
+    globalState.transactions = await getTransactionsFromLocal();
     this.loading = false;
+    getBalance().then(balance => {
+      globalState.balance = balance;
+    });
+    getTransactions().then(list => {
+      globalState.transactions = list;
+    });
   }
 }
 </script>

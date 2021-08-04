@@ -48,7 +48,7 @@ export async function saveTransactions(
   await putTransactionsInLocal(transactions, currentMonthStart().valueOf());
 }
 
-async function getTransactionsFromLocal(): Promise<TransactionList> {
+export async function getTransactionsFromLocal(): Promise<TransactionList> {
   const db = await openDatabase();
   const list = await db.get('transactions', currentMonthStart().valueOf());
   if (list) {
