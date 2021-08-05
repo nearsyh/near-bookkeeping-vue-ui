@@ -1,12 +1,14 @@
 <template>
   <n-message-provider>
-    <Transactions
-      v-if="user !== ''"
-      v-bind:transactions="transactions"
-      :key="transactions.length"
-      :loading="loading"
-    />
-    <UserSelector v-else @updated="onUserSelected()" />
+    <n-dialog-provider>
+      <Transactions
+        v-if="user !== ''"
+        v-bind:transactions="transactions"
+        :key="transactions.length"
+        :loading="loading"
+      />
+      <UserSelector v-else @updated="onUserSelected()" />
+    </n-dialog-provider>
   </n-message-provider>
 </template>
 
@@ -20,7 +22,7 @@ import { TransactionList } from './models/transaction';
 import { reactive } from '@vue/reactivity';
 import { Accounts } from './models/account';
 import { getUser } from './lib/common';
-import { NMessageProvider } from 'naive-ui';
+import { NMessageProvider, NDialogProvider } from 'naive-ui';
 import { Balance } from './models/balance';
 
 export const globalState = reactive({
@@ -34,7 +36,8 @@ export const globalState = reactive({
   components: {
     Transactions,
     UserSelector,
-    NMessageProvider
+    NMessageProvider,
+    NDialogProvider
   },
   watch: {
     monthOffset: async function(value: number) {

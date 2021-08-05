@@ -13,6 +13,7 @@
         v-for="transaction of transactions.items()"
         :key="transaction.timestamp"
         :transaction="transaction"
+        @delete="onDelete"
       />
       <div class="transaction-adder-container">
         <TransactionAdder />
@@ -31,6 +32,7 @@ import { globalState } from '@/App.vue';
 import { getTransactions } from '@/lib/fetcher';
 import { NSkeleton } from 'naive-ui';
 import { getBalance } from '@/lib/connector';
+import { Timestamp } from '@/models/common';
 
 @Options({
   components: {
@@ -55,6 +57,16 @@ export default class Transactions extends Vue {
     globalState.balance = await getBalance();
     this.refreshing = false;
     (this.$refs.transactionsList as any).scrollTop = 0;
+  }
+
+  async onDelete(timestamp: Timestamp) {
+    globalState.transactions.remove(timestamp);
+    getTransactions(timestamp).then(list => {
+      globalState.transactions = list;
+    });
+    getBalance().then(b => {
+      globalState.balance = b;
+    });
   }
 }
 </script>

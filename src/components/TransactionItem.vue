@@ -1,6 +1,7 @@
 <template>
   <div
     class="transaction-item"
+    v-touch:hold="onHold"
     @click="showNote = true && transaction.note !== ''"
   >
     <div class="transaction-creator">
@@ -56,7 +57,13 @@
 import { Options, Vue } from 'vue-class-component';
 import { Transaction, TransactionType } from '@/models/transaction';
 import { globalState } from '@/App.vue';
-import { NIcon, NDrawer, NDrawerContent } from 'naive-ui';
+import { deleteTransaction } from '@/lib/connector';
+import {
+  NIcon,
+  NDrawer,
+  NDrawerContent,
+  useDialog
+} from 'naive-ui';
 import {
   ArrowDownwardRound as ArrowIcon,
   NoteAltOutlined as NoteIcon
@@ -77,6 +84,7 @@ import {
 export default class TransactionItem extends Vue {
   transaction!: Transaction;
   showNote = false;
+  dialog = useDialog();
 
   get avatar(): String {
     return this.transaction.creator === '傻爸' ? 'near.jpg' : 'pang.jpg';
@@ -105,6 +113,21 @@ export default class TransactionItem extends Vue {
 
   get amount(): String {
     return this.transaction.amount().toStr();
+  }
+
+  onHold(event: any) {
+    this.dialog.warning({
+      title: '',
+      content: '你确定要删除这条记录吗?',
+      positiveText: '删除',
+      negativeText: '取消',
+      onPositiveClick: () => {
+        deleteTransaction(this.transaction.timestamp);
+        this.$emit('delete', this.transaction.timestamp);
+      },
+      onNegativeClick: () => {
+      }
+    });
   }
 }
 </script>

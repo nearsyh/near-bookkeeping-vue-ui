@@ -210,7 +210,7 @@ export class Transaction {
 
   public clone(): any {
     const ret = Object.assign({}, this);
-    ret.entries = this.entries.map((entry) => entry.clone());
+    ret.entries = this.entries.map(entry => entry.clone());
     return ret;
   }
 
@@ -276,10 +276,28 @@ export class TransactionList {
   }
 
   public append(newTransactions: Transaction[]) {
-    this.transactions.splice(
-      0,
-      0,
-      ...newTransactions.sort((a, b) => b.timestamp - a.timestamp)
+    if (newTransactions.length === 0) {
+      return;
+    }
+    newTransactions = newTransactions.sort((a, b) => b.timestamp - a.timestamp);
+    const earliestTimestamp =
+      newTransactions[newTransactions.length - 1].timestamp;
+    this.transactions = this.transactions.filter(
+      transaction => transaction.timestamp < earliestTimestamp
+    );
+    this.transactions.splice(0, 0, ...newTransactions);
+  }
+
+  public remove(timestamp: Timestamp) {
+    const index = this.transactions.findIndex(
+      transaction => transaction.timestamp === timestamp
+    );
+    this.transactions.splice(index, 1);
+  }
+
+  public removeAfter(timestamp: Timestamp) {
+    this.transactions = this.transactions.filter(
+      trans => trans.timestamp < timestamp
     );
   }
 

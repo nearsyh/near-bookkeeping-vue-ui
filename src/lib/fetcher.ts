@@ -18,7 +18,9 @@ async function openDatabase(): Promise<IDBPDatabase<unknown>> {
   });
 }
 
-export async function getTransactions(): Promise<TransactionList> {
+export async function getTransactions(
+  since: Timestamp = -1
+): Promise<TransactionList> {
   if (!isIndexedDBSupported()) {
     return await getTransactionsFromRemote();
   }
@@ -26,12 +28,16 @@ export async function getTransactions(): Promise<TransactionList> {
   const monthStart = currentMonthStart();
   const transactionsLocal = await getTransactionsFromLocal();
 
-  const newTransactionsSince = await getTransactionsFromRemote(
-    transactionsLocal.items().length === 0 ||
+  let actualSince = since;
+  if (actualSince < 0) {
+    actualSince =
+      transactionsLocal.items().length === 0 ||
       monthStart.isAfter(transactionsLocal.moment.valueOf())
-      ? monthStart.valueOf()
-      : transactionsLocal.moment.valueOf() + 1
-  );
+        ? monthStart.valueOf()
+        : transactionsLocal.moment.valueOf() + 1;
+  }
+  const newTransactionsSince = await getTransactionsFromRemote(actualSince);
+  transactionsLocal.removeAfter(actualSince);
   transactionsLocal.append(newTransactionsSince.items());
   transactionsLocal.truncateTo(monthStart);
 
@@ -65,7 +71,7 @@ async function putTransactionsInLocal(
   timestamp: Timestamp
 ): Promise<void> {
   const db = await openDatabase();
-  const items = transactions.items().map((trans) => trans.clone());
+  const items = transactions.items().map(trans => trans.clone());
   await db.put('transactions', items, timestamp);
 }
 

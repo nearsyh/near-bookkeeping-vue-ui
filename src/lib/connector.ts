@@ -88,6 +88,10 @@ export async function addTransaction(
   return Transaction.fromObject(data);
 }
 
+export async function deleteTransaction(id: Timestamp) {
+  await axios.delete<any>(`${apiEndpoint}/transactions/${id}`);
+}
+
 export async function getBalance(): Promise<Balance> {
   const data = await get<any>(`${apiEndpoint}/balance`);
   return Balance.fromObject(data);
