@@ -33,6 +33,7 @@ import { getTransactions } from '@/lib/fetcher';
 import { NSkeleton } from 'naive-ui';
 import { getBalance } from '@/lib/connector';
 import { Timestamp } from '@/models/common';
+import { currentMonthStart } from '@/lib/common';
 
 @Options({
   components: {
@@ -53,7 +54,9 @@ export default class Transactions extends Vue {
 
   async onRefresh() {
     this.refreshing = true;
-    globalState.transactions = await getTransactions();
+    globalState.transactions = await getTransactions(
+      currentMonthStart().valueOf()
+    );
     globalState.balance = await getBalance();
     this.refreshing = false;
     (this.$refs.transactionsList as any).scrollTop = 0;
